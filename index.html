@@ -7,16 +7,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
    <style>
     :root {
-        /* Nossas novas cores inspiradas na bandeira */
-        --primary: #2ecc71;  /* Um verde para o botão de Zap, para não ficar azul demais e destacar */
-        --secondary: #00d2ff; /* O azul claro vibrante da bandeira, para o cabeçalho e detalhes */
-        --accent: #2c3e50;    /* Um tom de preto/cinza escuro para o texto principal e títulos */
-        --danger: #e74c3c;   /* Mantemos o vermelho para o plantão, pois é um padrão de urgência */
-        --bg: #ffffff;        /* Fundo branco, como na bandeira */
-        --white: #ffffff;     /* Branco puro para elementos flutuantes */
-        --text-on-secondary: #ffffff; /* Texto branco sobre o fundo azul do cabeçalho */
-        --card-bg: #f8f9fa;   /* Um cinza bem claro para o fundo dos cards, para dar contraste */
+        /* Azul Royal extraído da bandeira */
+        --primary: #25d366;    /* Verde do WhatsApp */
+        --secondary: #0047AB;  /* Azul Royal Escuro (Bandeira) */
+        --accent: #1a1a1a;     /* Preto para textos */
+        --danger: #d63031;     /* Vermelho para Plantão */
+        --bg: #ffffff;         /* Fundo Branco */
+        --card-bg: #f1f2f6;    /* Cinza muito claro para os cards */
+        --white: #ffffff;
     }
+    
+    /* Ajuste extra para o degradê do topo ficar elegante */
+    .hero {
+        background: linear-gradient(135deg, var(--secondary), #003380);
+        padding: 40px 20px;
+        text-align: center;
+        color: white;
+    }
+</style>
 
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; scroll-behavior: smooth; }
         body { background-color: var(--bg); margin: 0; padding-top: 70px; }
