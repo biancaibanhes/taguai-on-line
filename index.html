@@ -5,29 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guia de Taguaí - Suas Páginas Amarelas On-line</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-   <style>
-    :root {
-        /* Azul Royal extraído da bandeira */
-        --primary: #25d366;    /* Verde do WhatsApp */
-        --secondary: #0047AB;  /* Azul Royal Escuro (Bandeira) */
-        --accent: #1a1a1a;     /* Preto para textos */
-        --danger: #d63031;     /* Vermelho para Plantão */
-        --bg: #ffffff;         /* Fundo Branco */
-        --card-bg: #f1f2f6;    /* Cinza muito claro para os cards */
-        --white: #ffffff;
-    }
-    
-    /* Ajuste extra para o degradê do topo ficar elegante */
-    .hero {
-        background: linear-gradient(135deg, var(--secondary), #003380);
-        padding: 40px 20px;
-        text-align: center;
-        color: white;
-    }
-</style>
+    <style>
+        :root {
+            /* Azul Royal extraído da bandeira */
+            --primary: #25d366;    /* Verde do WhatsApp */
+            --secondary: #0047AB;  /* Azul Royal Escuro */
+            --danger: #d63031;     /* Vermelho para Plantão */
+            --bg: #ffffff;         /* Fundo Branco */
+            --card-bg: #f8f9fa;    /* Cinza muito claro */
+            --white: #ffffff;
+        }
 
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; scroll-behavior: smooth; }
-        body { background-color: var(--bg); margin: 0; padding-top: 70px; }
+        body { background-color: var(--bg); margin: 0; padding-top: 80px; }
 
         /* HEADER & NAV */
         header {
@@ -46,7 +36,8 @@
             padding: 10px 20px;
         }
 
-        .logo { font-weight: bold; color: var(--secondary); font-size: 1.2rem; text-decoration: none; }
+        .logo-container { display: flex; align-items: center; text-decoration: none; gap: 10px; }
+        .logo-text { font-weight: bold; color: var(--secondary); font-size: 1.2rem; }
 
         .nav-links a {
             text-decoration: none;
@@ -70,10 +61,10 @@
             100% { transform: scale(1); }
         }
 
-        /* BUSCA */
+        /* BUSCA & HERO */
         .hero {
-            background: linear-gradient(135deg, var(--secondary), #128c7e);
-            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--secondary), #002d6b);
+            padding: 50px 20px;
             text-align: center;
             color: white;
         }
@@ -89,16 +80,17 @@
             padding: 15px 25px;
             border-radius: 30px;
             border: none;
-            font-size: 1rem;
+            font-size: 1.1rem;
             outline: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         /* CATEGORIAS */
-        .section-title { padding: 20px 20px 0; max-width: 1200px; margin: auto; }
+        .section-title { padding: 30px 20px 0; max-width: 1200px; margin: auto; }
         
         .cat-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 15px;
             padding: 20px;
             max-width: 1200px;
@@ -115,9 +107,9 @@
             border: 1px solid #eee;
         }
 
-        .cat-card:hover { border-color: var(--primary); transform: translateY(-3px); }
-        .cat-card i { font-size: 1.5rem; display: block; margin-bottom: 10px; color: var(--secondary); }
-        .cat-card span { font-size: 0.85rem; font-weight: 600; }
+        .cat-card:hover { border-color: var(--secondary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .cat-card i { font-size: 1.6rem; display: block; margin-bottom: 10px; color: var(--secondary); }
+        .cat-card span { font-size: 0.85rem; font-weight: 600; color: #444; }
 
         /* LISTAGEM */
         .grid {
@@ -133,56 +125,73 @@
             background: white;
             border-radius: 12px;
             padding: 20px;
-            border-left: 5px solid var(--primary);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--secondary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-right: 5px;
+            margin-bottom: 10px;
         }
 
         .btn-zap {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             background: var(--primary);
             color: white;
             text-align: center;
-            padding: 10px;
+            padding: 12px;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-top: 15px;
             font-weight: bold;
+            transition: 0.3s;
         }
+
+        .btn-zap:hover { background: #1ebe57; }
 
         /* FOOTER */
         footer {
-            background: #333;
+            background: #222;
             color: white;
-            padding: 40px 20px;
-            margin-top: 50px;
-            text-align: center;
+            padding: 50px 20px;
+            margin-top: 60px;
         }
 
         .footer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
+            gap: 40px;
             max-width: 1200px;
             margin: auto;
-            text-align: left;
         }
 
-        .social-links a { color: white; font-size: 1.5rem; margin-right: 15px; }
+        .social-links a { color: white; font-size: 1.8rem; text-decoration: none; }
     </style>
 </head>
 <body>
 
 <header>
     <nav> 
-     <a href="#" style="display: flex; align-items: center; text-decoration: none; gap: 10px;">
+        <a href="#" class="logo-container">
             <img src="brasao.png" alt="Brasão" style="height: 45px; width: auto;">
-            <span style="font-weight: bold; color: var(--secondary); font-size: 1.2rem;">Guia de Taguaí</span>
+            <span class="logo-text">Guia de Taguaí</span>
         </a>
         <div class="nav-links">
             <a href="#home">Início</a>
             <a href="#categorias">Categorias</a>
-            <a href="#plantao" class="btn-plantao">🚨 Plantão</a>
-            <a href="https://wa.me/5511991101812" target="_blank">Anuncie Aqui</a>
+            <a href="#plantao" class="btn-plantao" id="plantaoBtn">🚨 Plantão</a>
         </div>
     </nav>
 </header>
@@ -190,55 +199,59 @@
 <div id="home" class="hero">
     <h1>O que você procura hoje?</h1>
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Busque por serviço, nome ou apelido...">
+        <input type="text" id="searchInput" placeholder="Pizzaria, Eletricista, Farmácia...">
     </div>
 </div>
 
-<div id="categorias" class="section-title"><h2>Categoria</h2></div>
+<div id="categorias" class="section-title"><h2>Categorias</h2></div>
 <div class="cat-container">
     <div class="cat-card" onclick="filter('casa')"><i class="fas fa-home"></i><span>Casa e Construção</span></div>
     <div class="cat-card" onclick="filter('gastronomia')"><i class="fas fa-utensils"></i><span>Gastronomia</span></div>
     <div class="cat-card" onclick="filter('saude')"><i class="fas fa-heartbeat"></i><span>Saúde e Bem-Estar</span></div>
     <div class="cat-card" onclick="filter('veiculos')"><i class="fas fa-car"></i><span>Veículos</span></div>
     <div class="cat-card" onclick="filter('agro')"><i class="fas fa-paw"></i><span>Agro e Pet</span></div>
-	<div class="cat-card" onclick="filter('servicos')"><i class="fas fa-concierge-bell"></i><span>Serviços</span></div>
-	<div class="cat-card" onclick="filter('comercio')"><i class="fas fa-store"></i><span>Comércio</span></div>
-	<div class="cat-card" onclick="filter('outros')"><i class="fas fa-ellipsis-h"></i><span>Outros</span></div>
+    <div class="cat-card" onclick="filter('servicos')"><i class="fas fa-concierge-bell"></i><span>Serviços</span></div>
+    <div class="cat-card" onclick="filter('comercio')"><i class="fas fa-store"></i><span>Comércio</span></div>
     <div class="cat-card" onclick="filter('utilidade')"><i class="fas fa-info-circle"></i><span>Utilidade Pública</span></div>
+    <div class="cat-card" onclick="filter('todos')"><i class="fas fa-list"></i><span>Ver Todos</span></div>
 </div>
 
 <div class="grid" id="mainGrid">
-    </div>
+    <p style="grid-column: 1/-1; text-align: center;">Carregando serviços...</p>
+</div>
 
-<footer id="suporte">
+<footer>
     <div class="footer-grid">
         <div>
             <h3>Sobre o Portal</h3>
-            <p>O guia oficial de Taguaí. Facilitando a comunicação.</p>
+            <p>O guia oficial de Taguaí. Conectando moradores e empresas de forma rápida e eficiente.</p>
         </div>
         <div>
             <h3>Redes Sociais</h3>
             <div class="social-links">
-                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
         <div>
-            <h3>Suporte</h3>
-            <p>Viu um erro? <a href="https://wa.me/5511991101812" style="color:var(--primary)">Nos avise aqui.</a></p>
+            <h3>Suporte & Anúncios</h3>
+            <p>Quer aparecer aqui? <br>
+            <a href="https://wa.me/5511991101812" style="color:var(--primary); font-weight: bold; text-decoration: none;">Chame no WhatsApp</a></p>
         </div>
     </div>
 </footer>
 
 <script>
-    // AJUSTE 1: Aspas adicionadas no link
     const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZFyTZG1n2KX2zeQ-0Z1wwYIUTq53P7nuc--mRqXmlWkTTDR2UWUrlsuwKF2FtKB_e/pub?output=csv';
     
     let dadosOriginais = [];
 
+    // Função para remover acentos para facilitar busca
+    const normalizar = (t) => t.toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").trim();
+
     async function carregarDados() {
         try {
             const response = await fetch(SHEET_URL);
-            if (!response.ok) throw new Error('Não foi possível acessar a planilha.');
+            if (!response.ok) throw new Error('Falha ao acessar planilha');
             
             const csvText = await response.text();
             const linhasRaw = csvText.split(/\r?\n/).filter(linha => linha.trim() !== "");
@@ -268,7 +281,8 @@
                     zap: getVal("Telefone").replace(/\D/g, ''), 
                     telFormatado: getVal("Telefone"),
                     site: getVal("Site"),
-                    tags: `${getVal("Tag")} ${getVal("Subcategoria")} ${getVal("Nome")} ${getVal("Bairro")} ${getVal("Categoria")}`.toLowerCase()
+                    // Tag unificada para busca sem acento
+                    tags: normalizar(`${getVal("Nome")} ${getVal("Categoria")} ${getVal("Subcategoria")} ${getVal("Tag")} ${getVal("Bairro")}`)
                 };
             }).filter(item => item.nome && item.nome.length > 1);
 
@@ -276,25 +290,28 @@
 
         } catch (erro) {
             console.error(erro);
-            document.getElementById('mainGrid').innerHTML = `<p style="grid-column:1/-1; text-align:center;">Erro: ${erro.message}</p>`;
+            document.getElementById('mainGrid').innerHTML = `<p style="grid-column:1/-1; text-align:center;">Erro ao carregar dados. Verifique a conexão.</p>`;
         }
     }
 
     function render(lista) {
         const grid = document.getElementById('mainGrid');
         if (!lista || lista.length === 0) {
-            grid.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Nenhum resultado encontrado.</p>";
+            grid.innerHTML = "<p style='grid-column: 1/-1; text-align:center; padding: 50px;'>Nenhum resultado encontrado.</p>";
             return;
         }
 
         grid.innerHTML = lista.map(item => `
             <div class="card">
-                <span class="badge">${item.cat}</span>
-                <span class="badge" style="background:#eee; color:#666">${item.sub}</span>
-                <h3>${item.nome}</h3>
-                <p>📍 ${item.local}<br>🏙️ ${item.cidade}<br>📞 ${item.telFormatado}</p>
+                <div>
+                    <span class="badge" style="background:var(--secondary); color:white">${item.cat}</span>
+                    <span class="badge" style="background:#eee; color:#666">${item.sub}</span>
+                    <h3 style="margin: 10px 0 5px 0; color:#333">${item.nome}</h3>
+                    <p style="font-size: 0.85rem; color:#666; margin: 0">📍 ${item.local}</p>
+                    <p style="font-size: 0.85rem; color:#666; margin: 5px 0">📞 ${item.telFormatado}</p>
+                </div>
                 <div style="display:flex; gap:10px;">
-                    <a href="https://wa.me/55${item.zap}" target="_blank" class="btn-zap" style="flex:1">
+                    <a href="https://wa.me/55${item.zap}?text=Vi seu anúncio no Guia de Taguaí" target="_blank" class="btn-zap" style="flex:1">
                         <i class="fab fa-whatsapp"></i> WhatsApp
                     </a>
                     ${item.site ? `<a href="${item.site}" target="_blank" class="btn-zap" style="background:#333; flex:1">Site</a>` : ''}
@@ -303,30 +320,32 @@
         `).join('');
     }
 
-    // AJUSTE 2: Busca melhorada para aceitar termos parciais
+    // Busca
     document.getElementById('searchInput').addEventListener('input', (e) => {
-        const termo = e.target.value.toLowerCase().trim();
-        if (termo === "") {
-            render(dadosOriginais);
-        } else {
-            const filtrados = dadosOriginais.filter(d => d.tags.includes(termo));
-            render(filtrados);
-        }
+        const termo = normalizar(e.target.value);
+        const filtrados = dadosOriginais.filter(d => d.tags.includes(termo));
+        render(filtrados);
     });
 
-    // AJUSTE 3: Filtro corrigido para bater com o texto exato ou parcial da categoria
-    function filter(cat) {
-        if(cat === 'todos') {
+    // Filtro Categorias
+    function filter(catSelecionada) {
+        if(catSelecionada === 'todos') {
             render(dadosOriginais);
         } else {
-            // Filtra por categorias que CONTÉM o nome (ex: 'casa' encontra 'Casa e Construção')
-            const filtrados = dadosOriginais.filter(d => 
-                d.cat.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(cat.toLowerCase())
-            );
+            const termo = normalizar(catSelecionada);
+            const filtrados = dadosOriginais.filter(d => normalizar(d.cat).includes(termo));
             render(filtrados);
         }
-        window.location.href = "#categorias"; // Move a tela para os resultados
+        window.location.href = "#categorias";
     }
+
+    // Botão de Plantão
+    document.getElementById('plantaoBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        const plantao = dadosOriginais.filter(d => d.tags.includes('plantao') || d.tags.includes('emergencia'));
+        render(plantao);
+        window.location.href = "#mainGrid";
+    });
 
     carregarDados();
 </script>
