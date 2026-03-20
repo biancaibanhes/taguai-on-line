@@ -3,23 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guia de Taguaí - Suas Páginas Amarelas On-line</title>
+    <title>Guia de Taguaí - Suas Páginas Amarelas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
+        /* CONFIGURAÇÃO DE CORES DA BANDEIRA */
         :root {
-            /* Azul Royal extraído da bandeira */
-            --primary: #25d366;    /* Verde do WhatsApp */
-            --secondary: #0047AB;  /* Azul Royal Escuro */
-            --danger: #d63031;     /* Vermelho para Plantão */
-            --bg: #ffffff;         /* Fundo Branco */
-            --card-bg: #f8f9fa;    /* Cinza muito claro */
+            --primary: #25d366;    /* Verde WhatsApp */
+            --secondary: #00BFFF;  /* Azul de Taguaí */
+            --danger: #e74c3c;     /* Vermelho Plantão */
+            --bg: #f8f9fa;         /* Fundo levemente cinza */
             --white: #ffffff;
+            --dark: #333333;
         }
 
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; scroll-behavior: smooth; }
-        body { background-color: var(--bg); margin: 0; padding-top: 80px; }
+        /* RESET E GERAL */
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; scroll-behavior: smooth; }
+        body { background-color: var(--bg); margin: 0; padding-top: 80px; color: var(--dark); }
 
-        /* HEADER & NAV */
+        /* CABEÇALHO */
         header {
             background: var(--white);
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -38,13 +40,14 @@
 
         .logo-container { display: flex; align-items: center; text-decoration: none; gap: 10px; }
         .logo-text { font-weight: bold; color: var(--secondary); font-size: 1.2rem; }
+        .brasao { height: 45px; width: auto; }
 
         .nav-links a {
             text-decoration: none;
             color: #555;
             margin-left: 15px;
             font-size: 0.9rem;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .btn-plantao {
@@ -61,36 +64,35 @@
             100% { transform: scale(1); }
         }
 
-        /* BUSCA & HERO */
+        /* ÁREA DE BUSCA (HERO) */
         .hero {
-            background: linear-gradient(135deg, var(--secondary), #002d6b);
-            padding: 50px 20px;
+            background: linear-gradient(135deg, var(--secondary), #0080ff);
+            padding: 60px 20px;
             text-align: center;
             color: white;
         }
 
         .search-box {
-            max-width: 500px;
-            margin: 20px auto 0;
-            position: relative;
+            max-width: 600px;
+            margin: 25px auto 0;
         }
 
         .search-box input {
             width: 100%;
-            padding: 15px 25px;
-            border-radius: 30px;
+            padding: 18px 25px;
+            border-radius: 35px;
             border: none;
             font-size: 1.1rem;
             outline: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
 
         /* CATEGORIAS */
-        .section-title { padding: 30px 20px 0; max-width: 1200px; margin: auto; }
+        .section-title { padding: 30px 20px 0; max-width: 1200px; margin: auto; font-weight: bold; }
         
         .cat-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 15px;
             padding: 20px;
             max-width: 1200px;
@@ -101,17 +103,17 @@
             background: white;
             padding: 20px;
             text-align: center;
-            border-radius: 12px;
+            border-radius: 15px;
             cursor: pointer;
             transition: 0.3s;
             border: 1px solid #eee;
         }
 
-        .cat-card:hover { border-color: var(--secondary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .cat-card i { font-size: 1.6rem; display: block; margin-bottom: 10px; color: var(--secondary); }
-        .cat-card span { font-size: 0.85rem; font-weight: 600; color: #444; }
+        .cat-card:hover { border-color: var(--secondary); transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .cat-card i { font-size: 1.8rem; display: block; margin-bottom: 10px; color: var(--secondary); }
+        .cat-card span { font-size: 0.85rem; font-weight: 600; color: #555; }
 
-        /* LISTAGEM */
+        /* CARDS DE RESULTADO */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -125,8 +127,8 @@
             background: white;
             border-radius: 12px;
             padding: 20px;
-            border-left: 5px solid var(--secondary);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-left: 6px solid var(--secondary);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -135,19 +137,15 @@
         .badge {
             display: inline-block;
             padding: 4px 10px;
+            background: #eee;
             border-radius: 5px;
             font-size: 0.7rem;
             font-weight: bold;
-            text-transform: uppercase;
-            margin-right: 5px;
             margin-bottom: 10px;
+            color: #666;
         }
 
         .btn-zap {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
             background: var(--primary);
             color: white;
             text-align: center;
@@ -156,36 +154,23 @@
             border-radius: 8px;
             margin-top: 15px;
             font-weight: bold;
-            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .btn-zap:hover { background: #1ebe57; }
-
-        /* FOOTER */
-        footer {
-            background: #222;
-            color: white;
-            padding: 50px 20px;
-            margin-top: 60px;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .social-links a { color: white; font-size: 1.8rem; text-decoration: none; }
+        /* RODAPÉ */
+        footer { background: #222; color: white; padding: 40px 20px; margin-top: 50px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1200px; margin: auto; text-align: left; }
     </style>
 </head>
 <body>
 
 <header>
-    <nav> 
+    <nav>
         <a href="#" class="logo-container">
-            <img src="brasao.jpg" alt="Brasão" style="height: 45px; width: auto;">
+            <img src="brasao.jpg" alt="Brasão" class="brasao">
             <span class="logo-text">Guia de Taguaí</span>
         </a>
         <div class="nav-links">
@@ -197,155 +182,103 @@
 </header>
 
 <div id="home" class="hero">
-    <h1>O que você procura hoje?</h1>
+    <h1>O que você procura hoje em Taguaí?</h1>
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Pizzaria, Eletricista, Farmácia...">
+        <input type="text" id="searchInput" placeholder="Ex: Pizza, Farmácia, Eletricista...">
     </div>
 </div>
 
-<div id="categorias" class="section-title"><h2>Categorias</h2></div>
+<div id="categorias" class="section-title">Categorias</div>
 <div class="cat-container">
-    <div class="cat-card" onclick="filter('casa')"><i class="fas fa-home"></i><span>Casa e Construção</span></div>
-    <div class="cat-card" onclick="filter('gastronomia')"><i class="fas fa-utensils"></i><span>Gastronomia</span></div>
-    <div class="cat-card" onclick="filter('saude')"><i class="fas fa-heartbeat"></i><span>Saúde e Bem-Estar</span></div>
+    <div class="cat-card" onclick="filter('casa')"><i class="fas fa-home"></i><span>Construção</span></div>
+    <div class="cat-card" onclick="filter('gastronomia')"><i class="fas fa-utensils"></i><span>Alimentação</span></div>
+    <div class="cat-card" onclick="filter('saude')"><i class="fas fa-heartbeat"></i><span>Saúde</span></div>
     <div class="cat-card" onclick="filter('veiculos')"><i class="fas fa-car"></i><span>Veículos</span></div>
-    <div class="cat-card" onclick="filter('agro')"><i class="fas fa-paw"></i><span>Agro e Pet</span></div>
-    <div class="cat-card" onclick="filter('servicos')"><i class="fas fa-concierge-bell"></i><span>Serviços</span></div>
-    <div class="cat-card" onclick="filter('comercio')"><i class="fas fa-store"></i><span>Comércio</span></div>
-    <div class="cat-card" onclick="filter('utilidade')"><i class="fas fa-info-circle"></i><span>Utilidade Pública</span></div>
+    <div class="cat-card" onclick="filter('servicos')"><i class="fas fa-tools"></i><span>Serviços</span></div>
     <div class="cat-card" onclick="filter('todos')"><i class="fas fa-list"></i><span>Ver Todos</span></div>
 </div>
 
 <div class="grid" id="mainGrid">
-    <p style="grid-column: 1/-1; text-align: center;">Carregando serviços...</p>
-</div>
+    </div>
 
 <footer>
     <div class="footer-grid">
         <div>
-            <h3>Sobre o Portal</h3>
-            <p>O guia oficial de Taguaí. Conectando moradores e empresas de forma rápida e eficiente.</p>
+            <h3>Guia de Taguaí</h3>
+            <p>Sua lista telefônica digital sempre atualizada.</p>
         </div>
         <div>
-            <h3>Redes Sociais</h3>
-            <div class="social-links">
-                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-            </div>
-        </div>
-        <div>
-            <h3>Suporte & Anúncios</h3>
-            <p>Quer aparecer aqui? <br>
-            <a href="https://wa.me/5511991101812" style="color:var(--primary); font-weight: bold; text-decoration: none;">Chame no WhatsApp</a></p>
+            <h3>Suporte</h3>
+            <p><a href="https://wa.me/5511991101812" style="color:var(--primary); text-decoration:none;">Anuncie seu comércio aqui!</a></p>
         </div>
     </div>
 </footer>
 
 <script>
     const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZFyTZG1n2KX2zeQ-0Z1wwYIUTq53P7nuc--mRqXmlWkTTDR2UWUrlsuwKF2FtKB_e/pub?output=csv';
-    
     let dadosOriginais = [];
 
-    // Função para remover acentos para facilitar busca
     const normalizar = (t) => t.toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").trim();
 
     async function carregarDados() {
         try {
             const response = await fetch(SHEET_URL);
-            if (!response.ok) throw new Error('Falha ao acessar planilha');
-            
             const csvText = await response.text();
-            const linhasRaw = csvText.split(/\r?\n/).filter(linha => linha.trim() !== "");
-            
-            const matriz = linhasRaw.map(linha => {
-                return linha.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(campo => 
-                    campo.trim().replace(/^"|"$/g, '').replace(/""/g, '"')
-                );
+            const linhas = csvText.split(/\r?\n/).filter(l => l.trim() !== "").map(linha => {
+                return linha.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(campo => campo.trim().replace(/^"|"$/g, ''));
             });
 
-            const cabecalho = matriz[0].map(c => c.toLowerCase().trim());
-
-            dadosOriginais = matriz.slice(1).map(linha => {
-                const getVal = (nomeCol) => {
-                    const idx = cabecalho.indexOf(nomeCol.toLowerCase());
-                    return (idx !== -1 && linha[idx]) ? linha[idx] : "";
+            const cabecalho = linhas[0].map(c => c.toLowerCase());
+            dadosOriginais = linhas.slice(1).map(linha => {
+                const getVal = (nome) => {
+                    const i = cabecalho.indexOf(nome.toLowerCase());
+                    return (i !== -1) ? linha[i] : "";
                 };
-
-                const endereco = `${getVal("Logradouro")}, ${getVal("Número")} ${getVal("Complemento")} - ${getVal("Bairro")}`;
-
                 return {
                     nome: getVal("Nome"),
                     cat: getVal("Categoria"),
                     sub: getVal("Subcategoria"),
-                    local: endereco,
-                    cidade: getVal("Cidade"),
-                    zap: getVal("Telefone").replace(/\D/g, ''), 
+                    local: `${getVal("Logradouro")}, ${getVal("Número")} - ${getVal("Bairro")}`,
+                    zap: getVal("Telefone").replace(/\D/g, ''),
                     telFormatado: getVal("Telefone"),
-                    site: getVal("Site"),
-                    // Tag unificada para busca sem acento
-                    tags: normalizar(`${getVal("Nome")} ${getVal("Categoria")} ${getVal("Subcategoria")} ${getVal("Tag")} ${getVal("Bairro")}`)
+                    tags: normalizar(`${getVal("Nome")} ${getVal("Categoria")} ${getVal("Subcategoria")} ${getVal("Tag")}`)
                 };
-            }).filter(item => item.nome && item.nome.length > 1);
+            }).filter(item => item.nome);
 
             render(dadosOriginais);
-
-        } catch (erro) {
-            console.error(erro);
-            document.getElementById('mainGrid').innerHTML = `<p style="grid-column:1/-1; text-align:center;">Erro ao carregar dados. Verifique a conexão.</p>`;
-        }
+        } catch (e) { console.error(e); }
     }
 
     function render(lista) {
         const grid = document.getElementById('mainGrid');
-        if (!lista || lista.length === 0) {
-            grid.innerHTML = "<p style='grid-column: 1/-1; text-align:center; padding: 50px;'>Nenhum resultado encontrado.</p>";
-            return;
-        }
-
         grid.innerHTML = lista.map(item => `
             <div class="card">
                 <div>
-                    <span class="badge" style="background:var(--secondary); color:white">${item.cat}</span>
-                    <span class="badge" style="background:#eee; color:#666">${item.sub}</span>
-                    <h3 style="margin: 10px 0 5px 0; color:#333">${item.nome}</h3>
-                    <p style="font-size: 0.85rem; color:#666; margin: 0">📍 ${item.local}</p>
-                    <p style="font-size: 0.85rem; color:#666; margin: 5px 0">📞 ${item.telFormatado}</p>
+                    <span class="badge">${item.cat}</span>
+                    <h3>${item.nome}</h3>
+                    <p style="font-size:0.85rem; color:#666;">📍 ${item.local}<br>📞 ${item.telFormatado}</p>
                 </div>
-                <div style="display:flex; gap:10px;">
-                    <a href="https://wa.me/55${item.zap}?text=Vi seu anúncio no Guia de Taguaí" target="_blank" class="btn-zap" style="flex:1">
-                        <i class="fab fa-whatsapp"></i> WhatsApp
-                    </a>
-                    ${item.site ? `<a href="${item.site}" target="_blank" class="btn-zap" style="background:#333; flex:1">Site</a>` : ''}
-                </div>
+                <a href="https://wa.me/55${item.zap}" target="_blank" class="btn-zap">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
             </div>
         `).join('');
     }
 
-    // Busca
     document.getElementById('searchInput').addEventListener('input', (e) => {
-        const termo = normalizar(e.target.value);
-        const filtrados = dadosOriginais.filter(d => d.tags.includes(termo));
-        render(filtrados);
+        const t = normalizar(e.target.value);
+        render(dadosOriginais.filter(d => d.tags.includes(t)));
     });
 
-    // Filtro Categorias
-    function filter(catSelecionada) {
-        if(catSelecionada === 'todos') {
-            render(dadosOriginais);
-        } else {
-            const termo = normalizar(catSelecionada);
-            const filtrados = dadosOriginais.filter(d => normalizar(d.cat).includes(termo));
-            render(filtrados);
-        }
-        window.location.href = "#categorias";
+    function filter(c) {
+        if(c === 'todos') render(dadosOriginais);
+        else render(dadosOriginais.filter(d => normalizar(d.cat).includes(normalizar(c))));
     }
 
-    // Botão de Plantão
-    document.getElementById('plantaoBtn').addEventListener('click', (e) => {
+    document.getElementById('plantaoBtn').onclick = (e) => {
         e.preventDefault();
-        const plantao = dadosOriginais.filter(d => d.tags.includes('plantao') || d.tags.includes('emergencia'));
-        render(plantao);
-        window.location.href = "#mainGrid";
-    });
+        render(dadosOriginais.filter(d => d.tags.includes('plantao') || d.tags.includes('emergencia')));
+    };
 
     carregarDados();
 </script>
