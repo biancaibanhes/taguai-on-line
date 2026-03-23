@@ -55,6 +55,7 @@
         }
         .btn-vagas { background: var(--info); }
         .btn-plantao { background: var(--danger); animation: pulse 2s infinite; }
+        .btn-cadastro-top { color: var(--primary) !important; border: 1px solid var(--primary); padding: 5px 10px; border-radius: 15px; }
 
         @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
 
@@ -73,6 +74,19 @@
             border: none;
             outline: none;
         }
+
+        .anuncie-call {
+            margin-top: 15px;
+            display: inline-block;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 18px;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+        .anuncie-call:hover { background: var(--primary); }
 
         .cat-container {
             display: grid;
@@ -178,6 +192,7 @@
         </a>
         <div class="nav-links">
             <a href="#" onclick="resetView()">Início</a>
+            <a href="https://wa.me/5511991101812?text=Quero%20Cadastrar%20meu%20neg%C3%B3cio!%0ANome:%0AEndere%C3%A7o:%0ATelefone:%0ACategoria:%0ASite:" target="_blank" class="btn-cadastro-top">➕ Cadastre-se</a>
             <a href="#" class="btn-nav-special btn-vagas" id="vagasBtn">💼 Vagas</a>
             <a href="#" class="btn-nav-special btn-plantao" id="plantaoBtn">🚨 Plantão</a>
         </div>
@@ -189,6 +204,9 @@
     <div class="search-box">
         <input type="text" id="searchInput" placeholder="Ex: Farmácia, Pizzaria, Vagas...">
     </div>
+    <a href="https://wa.me/5511991101812?text=Quero%20Cadastrar%20meu%20neg%C3%B3cio!%0ANome:%0AEndere%C3%A7o:%0ATelefone:%0ACategoria:%0ASite:" target="_blank" class="anuncie-call">
+        <i class="fas fa-plus-circle"></i> Cadastre seu negócio gratuitamente no guia
+    </a>
 </div>
 
 <div id="vagasSection" class="vagas-info">
@@ -336,7 +354,7 @@
         document.getElementById('categorias').style.display = 'none'; 
         document.getElementById('plantaoSection').style.display = 'block';
         document.getElementById('vagasSection').style.display = 'none';
-        document.getElementById('mainGrid').style.display = 'none'; // PERMANECE APENAS O BANNER
+        document.getElementById('mainGrid').style.display = 'none';
         document.getElementById('btnVoltar').style.display = 'block';
         
         if (plantaoNomeDoDia) {
@@ -374,7 +392,7 @@
         document.getElementById('btnVoltar').style.display = 'block';
         if(c === 'todos') { render(dadosOriginais); document.getElementById('btnVoltar').style.display = 'none'; }
         else render(dadosOriginais.filter(d => normalizar(d.cat).includes(normalizar(c))));
-        window.scrollTo({ top: document.getElementById('categorias').offsetTop + 150, behavior: 'smooth' });
+        window.scrollTo({ top: 300, behavior: 'smooth' });
     }
 
     document.getElementById('vagasBtn').onclick = (e) => { e.preventDefault(); renderVagas(); };
