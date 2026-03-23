@@ -107,7 +107,8 @@
             padding: 15px;
             border-radius: 10px;
             border-left: 5px solid var(--info);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
         .plantao-banner { background: #ffebee; border-left-color: var(--danger); }
 
@@ -153,6 +154,18 @@
         .btn-site { background: #333; color: white; }
 
         footer { background: #222; color: white; padding: 30px; margin-top: 50px; text-align: center; }
+        
+        .btn-voltar-inicio {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #eee;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -165,7 +178,6 @@
         </a>
         <div class="nav-links">
             <a href="#" onclick="resetView()">Início</a>
-            <a href="#" onclick="scrollToCategories()">Categorias</a>
             <a href="#" class="btn-nav-special btn-vagas" id="vagasBtn">💼 Vagas</a>
             <a href="#" class="btn-nav-special btn-plantao" id="plantaoBtn">🚨 Plantão</a>
         </div>
@@ -181,7 +193,11 @@
 
 <div id="vagasSection" class="vagas-info">
     <div class="info-banner">
-        <strong>Painel de Vagas:</strong> Oportunidades ativas em Taguaí.
+        <strong>Painel de Vagas:</strong> Oportunidades ativas em Taguaí.<br>
+        Empresários, anuncie sua vaga conosco! 
+        <a href="https://wa.me/5511991101812?text=Quero anunciar minha vaga com o Guia de Taguaí" target="_blank" style="color:var(--info); font-weight:bold; text-decoration:underline;">
+            Clique aqui para anunciar no WhatsApp.
+        </a>
     </div>
 </div>
 
@@ -205,7 +221,10 @@
     <div class="cat-card" onclick="filter('todos')"><i class="fas fa-list"></i><span>Ver Todos</span></div>
 </div>
 
-<div class="grid" id="mainGrid"></div>
+<div id="areaResultados">
+    <div class="grid" id="mainGrid"></div>
+    <button class="btn-voltar-inicio" id="btnVoltar" style="display:none;" onclick="resetView()">← Voltar ao Início</button>
+</div>
 
 <footer>
     <p>&copy; 2026 Guia de Taguaí</p>
@@ -278,14 +297,10 @@
         document.getElementById('categorias').style.display = 'grid';
         document.getElementById('vagasSection').style.display = 'none';
         document.getElementById('plantaoSection').style.display = 'none';
+        document.getElementById('mainGrid').style.display = 'grid';
+        document.getElementById('btnVoltar').style.display = 'none';
         render(dadosOriginais);
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function scrollToCategories() {
-        document.getElementById('categorias').style.display = 'grid';
-        const target = document.getElementById('categorias');
-        window.scrollTo({ top: target.offsetTop - 90, behavior: 'smooth' });
     }
 
     function renderVagas() {
@@ -293,6 +308,8 @@
         document.getElementById('categorias').style.display = 'none'; 
         document.getElementById('vagasSection').style.display = 'block';
         document.getElementById('plantaoSection').style.display = 'none';
+        document.getElementById('mainGrid').style.display = 'grid';
+        document.getElementById('btnVoltar').style.display = 'block';
         
         if (vagasAtivas.length === 0) {
             grid.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Nenhuma vaga aberta.</p>';
@@ -311,14 +328,16 @@
                 </div>
             `).join('');
         }
-        window.scrollTo({ top: document.getElementById('vagasSection').offsetTop - 100, behavior: 'smooth' });
+        window.scrollTo({ top: 100, behavior: 'smooth' });
     }
 
     function mostrarPlantao() {
         const banner = document.getElementById('plantaoConteudo');
-        document.getElementById('categorias').style.display = 'none'; // OCULTA CATEGORIAS NO PLANTÃO
+        document.getElementById('categorias').style.display = 'none'; 
         document.getElementById('plantaoSection').style.display = 'block';
         document.getElementById('vagasSection').style.display = 'none';
+        document.getElementById('mainGrid').style.display = 'none'; // PERMANECE APENAS O BANNER
+        document.getElementById('btnVoltar').style.display = 'block';
         
         if (plantaoNomeDoDia) {
             const det = dadosOriginais.find(f => normalizar(f.nome) === normalizar(plantaoNomeDoDia));
@@ -328,8 +347,7 @@
                     <a href="https://wa.me/55${det.zap}" target="_blank" class="btn-action btn-whatsapp" style="flex:none; padding:8px 15px; width:auto;">WHATSAPP</a>
                 </div>` : `<strong>🚨 PLANTÃO HOJE:</strong> ${plantaoNomeDoDia}`;
         }
-        render(dadosOriginais.filter(d => normalizar(d.cat).includes('saude')));
-        window.scrollTo({ top: document.getElementById('plantaoSection').offsetTop - 100, behavior: 'smooth' });
+        window.scrollTo({ top: 100, behavior: 'smooth' });
     }
 
     function render(lista) {
@@ -352,10 +370,11 @@
     function filter(c) {
         document.getElementById('vagasSection').style.display = 'none';
         document.getElementById('plantaoSection').style.display = 'none';
-        if(c === 'todos') render(dadosOriginais);
+        document.getElementById('mainGrid').style.display = 'grid';
+        document.getElementById('btnVoltar').style.display = 'block';
+        if(c === 'todos') { render(dadosOriginais); document.getElementById('btnVoltar').style.display = 'none'; }
         else render(dadosOriginais.filter(d => normalizar(d.cat).includes(normalizar(c))));
-        const target = document.getElementById('mainGrid');
-        window.scrollTo({ top: target.offsetTop - 120, behavior: 'smooth' });
+        window.scrollTo({ top: document.getElementById('categorias').offsetTop + 150, behavior: 'smooth' });
     }
 
     document.getElementById('vagasBtn').onclick = (e) => { e.preventDefault(); renderVagas(); };
