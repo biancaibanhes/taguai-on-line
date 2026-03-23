@@ -8,9 +8,10 @@
     
     <style>
         :root {
-            --primary: #25d366;    /* Verde WhatsApp */
-            --secondary: #0047AB;  /* Azul Royal Taguaí */
-            --danger: #d63031;     /* Vermelho Plantão */
+            --primary: #25d366;
+            --secondary: #0047AB;
+            --danger: #d63031;
+            --info: #0984e3;
             --bg: #f8f9fa;
             --white: #ffffff;
             --dark: #333333;
@@ -39,47 +40,55 @@
         .logo-text { font-weight: bold; color: var(--secondary); font-size: 1.1rem; }
         .brasao { height: 40px; width: auto; }
 
-        .nav-links { display: flex; align-items: center; }
+        .nav-links { display: flex; align-items: center; gap: 10px; }
         .nav-links a {
             text-decoration: none;
             color: #555;
-            margin-left: 15px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.8rem;
+            font-weight: 700;
         }
 
-        .btn-plantao {
-            background: var(--danger);
-            color: white !important;
+        .btn-nav-special {
             padding: 6px 12px;
             border-radius: 20px;
-            animation: pulse 2s infinite;
+            color: white !important;
         }
+        .btn-vagas { background: var(--info); }
+        .btn-plantao { background: var(--danger); animation: pulse 2s infinite; }
 
         @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
 
         .hero {
             background: linear-gradient(135deg, var(--secondary), #003380);
-            padding: 50px 20px;
+            padding: 40px 20px;
             text-align: center;
             color: white;
         }
 
-        .search-box { max-width: 500px; margin: 20px auto 0; }
+        .search-box { max-width: 500px; margin: 15px auto 0; }
         .search-box input {
             width: 100%;
-            padding: 15px 25px;
+            padding: 12px 25px;
             border-radius: 30px;
             border: none;
-            font-size: 1rem;
             outline: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .anuncie-call {
+            margin-top: 15px;
+            display: inline-block;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 15px;
         }
 
         .cat-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 12px;
+            gap: 10px;
             padding: 20px;
             max-width: 1200px;
             margin: auto;
@@ -91,13 +100,28 @@
             text-align: center;
             border-radius: 12px;
             cursor: pointer;
-            transition: 0.3s;
             border: 1px solid #eee;
+            transition: 0.2s;
         }
+        .cat-card:hover { border-color: var(--secondary); background: #f0f7ff; }
 
-        .cat-card:hover { border-color: var(--secondary); transform: translateY(-3px); }
-        .cat-card i { font-size: 1.5rem; display: block; margin-bottom: 8px; color: var(--secondary); }
-        .cat-card span { font-size: 0.75rem; font-weight: 600; }
+        .cat-card i { font-size: 1.5rem; display: block; margin-bottom: 5px; color: var(--secondary); }
+        .cat-card span { font-size: 0.7rem; font-weight: 600; line-height: 1.1; display: block; }
+
+        .vagas-info, .plantao-info {
+            max-width: 1200px;
+            margin: 10px auto;
+            padding: 0 20px;
+            display: none;
+        }
+        .info-banner {
+            background: #e1f5fe;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid var(--info);
+            font-size: 0.9rem;
+        }
+        .plantao-banner { background: #ffebee; border-left-color: var(--danger); }
 
         .grid {
             display: grid;
@@ -112,26 +136,36 @@
             background: white;
             border-radius: 12px;
             padding: 20px;
-            border-left: 5px solid var(--secondary);
+            border-top: 4px solid var(--secondary);
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
+        .subcat-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--secondary);
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .card h3 { margin: 0 0 8px 0; font-size: 1.1rem; color: #222; }
+
         .badge {
             display: inline-block;
             padding: 3px 8px;
             background: #f0f0f0;
             border-radius: 4px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: bold;
-            margin-bottom: 8px;
             color: #666;
+            margin-bottom: 10px;
         }
 
         .btn-container { display: flex; gap: 10px; margin-top: 15px; }
-
         .btn-action {
             flex: 1;
             text-align: center;
@@ -139,17 +173,16 @@
             text-decoration: none;
             border-radius: 6px;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
         }
-
         .btn-whatsapp { background: var(--primary); color: white; }
         .btn-site { background: #333; color: white; }
 
-        footer { background: #222; color: white; padding: 40px 20px; margin-top: 50px; text-align: center; }
+        footer { background: #222; color: white; padding: 30px; margin-top: 50px; text-align: center; }
     </style>
 </head>
 <body>
@@ -161,9 +194,9 @@
             <span class="logo-text">Guia de Taguaí</span>
         </a>
         <div class="nav-links">
-            <a href="#home">Início</a>
-            <a href="#categorias">Categorias</a> <a href="https://wa.me/5511991101812" target="_blank" style="color: var(--secondary)">Anuncie Aqui</a>
-            <a href="#plantao" class="btn-plantao" id="plantaoBtn">🚨 Plantão</a>
+            <a href="#categorias">Categorias</a>
+            <a href="#" class="btn-nav-special btn-vagas" id="vagasBtn">💼 Vagas</a>
+            <a href="#plantao" class="btn-nav-special btn-plantao" id="plantaoBtn">🚨 Plantão</a>
         </div>
     </nav>
 </header>
@@ -171,84 +204,139 @@
 <div id="home" class="hero">
     <h1>O que você procura em Taguaí?</h1>
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Ex: Farmácia, Pizzaria, Advogado...">
+        <input type="text" id="searchInput" placeholder="Ex: Farmácia, Pizzaria, Vagas...">
+    </div>
+    <a href="https://wa.me/5511991101812" target="_blank" class="anuncie-call">
+        <i class="fas fa-plus-circle"></i> Cadastre sua empresa em nosso guia
+    </a>
+</div>
+
+<div id="vagasSection" class="vagas-info">
+    <div class="info-banner">
+        <strong>Painel de Vagas:</strong> Encontre oportunidades aqui. <br>
+        Empresário, anuncie suas vagas por um valor irrisório! 
+        <a href="https://wa.me/5511991101812" target="_blank" style="color:var(--info); font-weight:bold;">Clique aqui e anuncie.</a>
+    </div>
+</div>
+
+<div id="plantaoSection" class="plantao-info">
+    <div class="info-banner plantao-banner" id="plantaoConteudo">
+        <strong>Plantão Farmacêutico:</strong> Carregando informações de plantão...
     </div>
 </div>
 
 <div id="categorias" class="cat-container">
-    <div class="cat-card" onclick="filter('casa')"><i class="fas fa-home"></i><span>Construção</span></div>
-    <div class="cat-card" onclick="filter('gastronomia')"><i class="fas fa-utensils"></i><span>Alimentação</span></div>
-    <div class="cat-card" onclick="filter('saude')"><i class="fas fa-heartbeat"></i><span>Saúde</span></div>
-    <div class="cat-card" onclick="filter('comercio')"><i class="fas fa-store"></i><span>Comércio</span></div>
-    <div class="cat-card" onclick="filter('servicos')"><i class="fas fa-tools"></i><span>Serviços</span></div>
+    <div class="cat-card" onclick="filter('gastronomia')"><i class="fas fa-utensils"></i><span>Gastronomia</span></div>
+    <div class="cat-card" onclick="filter('casa')"><i class="fas fa-tools"></i><span>Casa e Construção</span></div>
+    <div class="cat-card" onclick="filter('veiculos')"><i class="fas fa-car"></i><span>Veículos</span></div>
+    <div class="cat-card" onclick="filter('saude')"><i class="fas fa-heartbeat"></i><span>Saúde e Bem-Estar</span></div>
+    <div class="cat-card" onclick="filter('educacao')"><i class="fas fa-graduation-cap"></i><span>Educação</span></div>
+    <div class="cat-card" onclick="filter('comercio')"><i class="fas fa-shopping-bag"></i><span>Comércio</span></div>
+    <div class="cat-card" onclick="filter('utilidade')"><i class="fas fa-info-circle"></i><span>Utilidade Pública</span></div>
+    <div class="cat-card" onclick="filter('hotelaria')"><i class="fas fa-bed"></i><span>Hotelaria</span></div>
+    <div class="cat-card" onclick="filter('servicos')"><i class="fas fa-concierge-bell"></i><span>Serviços</span></div>
+    <div class="cat-card" onclick="filter('outros')"><i class="fas fa-ellipsis-h"></i><span>Outros</span></div>
     <div class="cat-card" onclick="filter('todos')"><i class="fas fa-list"></i><span>Ver Todos</span></div>
 </div>
 
 <div class="grid" id="mainGrid">
-    <p style="grid-column: 1/-1; text-align: center;">Carregando dados...</p>
+    <p style="grid-column: 1/-1; text-align: center;">Buscando informações em Taguaí...</p>
 </div>
 
 <footer>
-    <p>&copy; 2026 Guia de Taguaí - Todos os direitos reservados.</p>
+    <p>&copy; 2026 Guia de Taguaí - Sua empresa no topo!</p>
 </footer>
 
 <script>
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZFyTZG1n2KX2zeQ-0Z1wwYIUTq53P7nuc--mRqXmlWkTTDR2UWUrlsuwKF2FtKB_e/pub?output=csv';
+    // URL da aba principal (Contatos/Empresas)
+    const SHEET_MAIN_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZFyTZG1n2KX2zeQ-0Z1wwYIUTq53P7nuc--mRqXmlWkTTDR2UWUrlsuwKF2FtKB_e/pub?output=csv&gid=0';
+    
+    // URL da aba Plantão (ajuste o GID conforme necessário)
+    const SHEET_PLANTAO_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZFyTZG1n2KX2zeQ-0Z1wwYIUTq53P7nuc--mRqXmlWkTTDR2UWUrlsuwKF2FtKB_e/pub?output=csv&gid=111568288';
+
     let dadosOriginais = [];
 
     const normalizar = (t) => t.toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").trim();
 
     async function carregarDados() {
         try {
-            const response = await fetch(SHEET_URL);
-            const csvText = await response.text();
-            const linhas = csvText.split(/\r?\n/).filter(l => l.trim() !== "").map(linha => {
-                return linha.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(campo => campo.trim().replace(/^"|"$/g, ''));
-            });
+            const [resMain, resPlantao] = await Promise.all([
+                fetch(SHEET_MAIN_URL),
+                fetch(SHEET_PLANTAO_URL)
+            ]);
 
-            const cabecalho = linhas[0].map(c => c.toLowerCase());
-            dadosOriginais = linhas.slice(1).map(linha => {
-                const getVal = (nome) => {
-                    const i = cabecalho.indexOf(nome.toLowerCase());
-                    return (i !== -1) ? linha[i] : "";
-                };
-                return {
-                    nome: getVal("Nome"),
-                    cat: getVal("Categoria"),
-                    sub: getVal("Subcategoria"),
-                    local: `${getVal("Logradouro")}, ${getVal("Número")} - ${getVal("Bairro")}`,
-                    zap: getVal("Telefone").replace(/\D/g, ''),
-                    telFormatado: getVal("Telefone"),
-                    site: getVal("Site"),
-                    tags: normalizar(`${getVal("Nome")} ${getVal("Categoria")} ${getVal("Subcategoria")} ${getVal("Tag")}`)
-                };
-            }).filter(item => item.nome);
+            const csvMain = await resMain.text();
+            processarEmpresas(csvMain);
 
-            render(dadosOriginais);
-        } catch (e) { console.error(e); }
+            const csvPlantao = await resPlantao.text();
+            processarPlantao(csvPlantao);
+
+        } catch (e) { console.error("Erro ao carregar dados:", e); }
     }
 
-    function render(lista) {
+    function processarEmpresas(csv) {
+        const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(linha => {
+            return linha.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(campo => campo.trim().replace(/^"|"$/g, ''));
+        });
+
+        const cabecalho = linhas[0].map(c => c.toLowerCase());
+        dadosOriginais = linhas.slice(1).map(linha => {
+            const getVal = (nome) => {
+                const i = cabecalho.indexOf(nome.toLowerCase());
+                return (i !== -1) ? linha[i] : "";
+            };
+            return {
+                nome: getVal("Nome"),
+                cat: getVal("Categoria"),
+                sub: getVal("Subcategoria"),
+                local: `${getVal("Logradouro")}, ${getVal("Número")} - ${getVal("Bairro")}`,
+                zap: getVal("Telefone").replace(/\D/g, ''),
+                telFormatado: getVal("Telefone"),
+                site: getVal("Site"),
+                tags: normalizar(`${getVal("Nome")} ${getVal("Categoria")} ${getVal("Subcategoria")} ${getVal("Tag")}`)
+            };
+        }).filter(item => item.nome);
+
+        render(dadosOriginais);
+    }
+
+    function processarPlantao(csv) {
+        const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "");
+        if (linhas.length > 1) {
+            const dados = linhas[1].split(/,(?=(?:(?:[^"]*"){2})*[^3]*$)/).map(c => c.trim().replace(/^"|"$/g, ''));
+            // Supondo: Coluna A = Data Início, Coluna B = Farmácia
+            const dataInicio = dados[0] || "Não informada";
+            const farmacia = dados[1] || "Consultar guia";
+            
+            document.getElementById('plantaoConteudo').innerHTML = `
+                <strong>🚨 Plantão Atual:</strong> ${farmacia} <br>
+                <small>Iniciado em: ${dataInicio}</small>
+            `;
+        }
+    }
+
+    function render(lista, isVagas = false, isPlantao = false) {
         const grid = document.getElementById('mainGrid');
+        document.getElementById('vagasSection').style.display = isVagas ? 'block' : 'none';
+        document.getElementById('plantaoSection').style.display = isPlantao ? 'block' : 'none';
+
+        if (lista.length === 0) {
+            grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Nenhum resultado encontrado para esta seleção.</p>';
+            return;
+        }
+
         grid.innerHTML = lista.map(item => `
             <div class="card">
                 <div>
+                    <div class="subcat-label">${item.sub || item.cat}</div>
+                    <h3>${item.nome}</h3>
                     <span class="badge">${item.cat}</span>
-                    <h3 style="margin:5px 0">${item.nome}</h3>
                     <p style="font-size:0.8rem; color:#666; margin:0">📍 ${item.local}</p>
                     ${item.telFormatado ? `<p style="font-size:0.8rem; color:#666; margin:4px 0">📞 ${item.telFormatado}</p>` : ''}
                 </div>
                 <div class="btn-container">
-                    ${item.zap ? `
-                        <a href="https://wa.me/55${item.zap}" target="_blank" class="btn-action btn-whatsapp">
-                            <i class="fab fa-whatsapp"></i> WhatsApp
-                        </a>
-                    ` : ''}
-                    ${item.site ? `
-                        <a href="${item.site}" target="_blank" class="btn-action btn-site">
-                            <i class="fas fa-globe"></i> Site
-                        </a>
-                    ` : ''}
+                    ${item.zap ? `<a href="https://wa.me/55${item.zap}" target="_blank" class="btn-action btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : ''}
+                    ${item.site ? `<a href="${item.site}" target="_blank" class="btn-action btn-site"><i class="fas fa-globe"></i> Site</a>` : ''}
                 </div>
             </div>
         `).join('');
@@ -256,7 +344,7 @@
 
     document.getElementById('searchInput').addEventListener('input', (e) => {
         const t = normalizar(e.target.value);
-        render(dadosOriginais.filter(d => d.tags.includes(t)));
+        render(dadosOriginais.filter(d => d.tags.includes(t)), t.includes('vaga') || t.includes('emprego'));
     });
 
     function filter(c) {
@@ -266,7 +354,13 @@
 
     document.getElementById('plantaoBtn').onclick = (e) => {
         e.preventDefault();
-        render(dadosOriginais.filter(d => d.tags.includes('plantao') || d.tags.includes('emergencia')));
+        const plantaoItems = dadosOriginais.filter(d => d.tags.includes('plantao') || d.tags.includes('emergencia') || d.cat.toLowerCase().includes('saude'));
+        render(plantaoItems, false, true);
+    };
+
+    document.getElementById('vagasBtn').onclick = (e) => {
+        e.preventDefault();
+        render(dadosOriginais.filter(d => d.tags.includes('vaga') || d.tags.includes('emprego')), true);
     };
 
     carregarDados();
