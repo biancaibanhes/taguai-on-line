@@ -157,12 +157,12 @@
 <header>
     <nav>
         <a href="#" class="logo-container">
-            <img src="brasao.jpg" alt="Brasão" class="brasao">
+            <img src="brasao.png" alt="Brasão" class="brasao">
             <span class="logo-text">Guia de Taguaí</span>
         </a>
         <div class="nav-links">
             <a href="#home">Início</a>
-            <a href="https://wa.me/5511991101812" target="_blank" style="color: var(--secondary)">Anuncie Aqui</a>
+            <a href="#categorias">Categorias</a> <a href="https://wa.me/5511991101812" target="_blank" style="color: var(--secondary)">Anuncie Aqui</a>
             <a href="#plantao" class="btn-plantao" id="plantaoBtn">🚨 Plantão</a>
         </div>
     </nav>
@@ -175,7 +175,7 @@
     </div>
 </div>
 
-<div class="cat-container">
+<div id="categorias" class="cat-container">
     <div class="cat-card" onclick="filter('casa')"><i class="fas fa-home"></i><span>Construção</span></div>
     <div class="cat-card" onclick="filter('gastronomia')"><i class="fas fa-utensils"></i><span>Alimentação</span></div>
     <div class="cat-card" onclick="filter('saude')"><i class="fas fa-heartbeat"></i><span>Saúde</span></div>
@@ -244,7 +244,6 @@
                             <i class="fab fa-whatsapp"></i> WhatsApp
                         </a>
                     ` : ''}
-                    
                     ${item.site ? `
                         <a href="${item.site}" target="_blank" class="btn-action btn-site">
                             <i class="fas fa-globe"></i> Site
