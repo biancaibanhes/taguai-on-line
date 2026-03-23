@@ -12,7 +12,6 @@
             --secondary: #0047AB;
             --danger: #d63031;
             --info: #0984e3;
-            --warning: #f1c40f;
             --bg: #f8f9fa;
             --white: #ffffff;
             --dark: #333333;
@@ -45,7 +44,7 @@
         .nav-links a {
             text-decoration: none;
             color: #555;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 700;
         }
 
@@ -56,8 +55,6 @@
         }
         .btn-vagas { background: var(--info); }
         .btn-plantao { background: var(--danger); animation: pulse 2s infinite; }
-        .btn-cadastro-top { color: var(--primary) !important; border: 1px solid var(--primary); padding: 5px 10px; border-radius: 15px; }
-        .btn-erro-top { color: #888 !important; font-size: 0.65rem !important; }
 
         @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
 
@@ -88,6 +85,7 @@
             border-radius: 20px;
             transition: 0.3s;
         }
+        .anuncie-call:hover { background: var(--primary); }
 
         .cat-container {
             display: grid;
@@ -107,6 +105,7 @@
             border: 1px solid #eee;
             transition: 0.2s;
         }
+        .cat-card:hover { border-color: var(--secondary); background: #f0f7ff; }
         .cat-card i { font-size: 1.5rem; display: block; margin-bottom: 5px; color: var(--secondary); }
         .cat-card span { font-size: 0.7rem; font-weight: 600; line-height: 1.1; display: block; }
 
@@ -140,7 +139,6 @@
             padding: 20px;
             border-top: 4px solid var(--secondary);
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            position: relative;
         }
 
         .card-vaga { border-top-color: var(--info); }
@@ -163,17 +161,10 @@
         .btn-whatsapp { background: var(--primary); color: white; }
         .btn-site { background: #333; color: white; }
 
-        .report-error {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            color: #ccc;
-            font-size: 0.75rem;
-            text-decoration: none;
-        }
-        .report-error:hover { color: var(--danger); }
+        footer { background: #222; color: #aaa; padding: 40px 20px; margin-top: 50px; text-align: center; }
+        .footer-link { color: #fff; text-decoration: none; font-size: 0.8rem; margin-top: 15px; display: inline-block; border: 1px solid #444; padding: 5px 15px; border-radius: 15px; }
+        .footer-link:hover { background: var(--danger); border-color: var(--danger); }
 
-        footer { background: #222; color: white; padding: 30px; margin-top: 50px; text-align: center; }
         .btn-voltar-inicio { display: block; margin: 20px auto; padding: 10px 20px; background: #eee; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; color: #666; }
     </style>
 </head>
@@ -187,8 +178,6 @@
         </a>
         <div class="nav-links">
             <a href="#" onclick="resetView()">Início</a>
-            <a href="https://wa.me/5511991101812?text=Quero%20Cadastrar%20meu%20neg%C3%B3cio!%0ANome:%0AEndere%C3%A7o:%0ATelefone:%0ACategoria:%0ASite:" target="_blank" class="btn-cadastro-top">➕ Cadastre-se</a>
-            <a href="https://wa.me/5511991101812?text=Ol%C3%A1!%20Encontrei%20um%20erro%20no%20site%20e%20gostaria%20de%20ajudar%20a%20corrigir." target="_blank" class="btn-erro-top">⚠️ Reportar Erro</a>
             <a href="#" class="btn-nav-special btn-vagas" id="vagasBtn">💼 Vagas</a>
             <a href="#" class="btn-nav-special btn-plantao" id="plantaoBtn">🚨 Plantão</a>
         </div>
@@ -238,6 +227,9 @@
 
 <footer>
     <p>&copy; 2026 Guia de Taguaí - Facilitando seu dia a dia.</p>
+    <a href="https://wa.me/5511991101812?text=Ol%C3%A1!%20Encontrei%20um%20erro%20no%20site%20e%20gostaria%20de%20ajudar%20a%20corrigir." target="_blank" class="footer-link">
+        <i class="fas fa-exclamation-triangle"></i> Encontrou algum erro? Nos conte.
+    </a>
 </footer>
 
 <script>
@@ -320,6 +312,7 @@
         document.getElementById('plantaoSection').style.display = 'none';
         document.getElementById('mainGrid').style.display = 'grid';
         document.getElementById('btnVoltar').style.display = 'block';
+        
         if (vagasAtivas.length === 0) {
             grid.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Nenhuma vaga aberta.</p>';
         } else {
@@ -347,6 +340,7 @@
         document.getElementById('vagasSection').style.display = 'none';
         document.getElementById('mainGrid').style.display = 'none';
         document.getElementById('btnVoltar').style.display = 'block';
+        
         if (plantaoNomeDoDia) {
             const det = dadosOriginais.find(f => normalizar(f.nome) === normalizar(plantaoNomeDoDia));
             banner.innerHTML = det ? `
@@ -362,10 +356,6 @@
         const grid = document.getElementById('mainGrid');
         grid.innerHTML = lista.map(item => `
             <div class="card">
-                <a href="https://wa.me/5511991101812?text=Ol%C3%A1!%20Encontrei%20um%20erro%20nas%20informa%C3%A7%C3%B5es%20da%20empresa%20${encodeURIComponent(item.nome)}.%20O%20erro%20%C3%A9%3A" 
-                   target="_blank" class="report-error" title="Reportar erro nesta empresa">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </a>
                 <div class="subcat-label">${item.sub || item.cat}</div>
                 <h3>${item.nome}</h3>
                 <span class="badge">${item.cat}</span>
