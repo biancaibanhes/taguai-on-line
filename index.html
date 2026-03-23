@@ -74,17 +74,6 @@
             outline: none;
         }
 
-        .anuncie-call {
-            margin-top: 15px;
-            display: inline-block;
-            color: #fff;
-            text-decoration: none;
-            font-size: 0.9rem;
-            background: rgba(255,255,255,0.2);
-            padding: 5px 15px;
-            border-radius: 15px;
-        }
-
         .cat-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -104,7 +93,6 @@
             transition: 0.2s;
         }
         .cat-card:hover { border-color: var(--secondary); background: #f0f7ff; }
-
         .cat-card i { font-size: 1.5rem; display: block; margin-bottom: 5px; color: var(--secondary); }
         .cat-card span { font-size: 0.7rem; font-weight: 600; line-height: 1.1; display: block; }
 
@@ -138,46 +126,19 @@
             padding: 20px;
             border-top: 4px solid var(--secondary);
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
 
-        .subcat-label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            font-weight: 800;
-            color: var(--secondary);
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
-        }
-
-        .card h3 { margin: 0 0 8px 0; font-size: 1.1rem; color: #222; }
-
-        .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            background: #f0f0f0;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            font-weight: bold;
-            color: #666;
-            margin-bottom: 10px;
-        }
+        .card-vaga { border-top-color: var(--info); }
+        .vaga-header { font-weight: bold; font-size: 1.2rem; color: var(--info); margin-bottom: 5px; }
+        .vaga-empresa { font-size: 0.9rem; font-weight: 600; color: #555; margin-bottom: 10px; }
+        .vaga-detalhe { font-size: 0.85rem; margin-bottom: 8px; color: #444; }
+        .vaga-label { font-weight: bold; color: #222; }
 
         .btn-container { display: flex; gap: 10px; margin-top: 15px; }
         .btn-action {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+            flex: 1; text-align: center; padding: 10px; text-decoration: none;
+            border-radius: 6px; font-weight: bold; font-size: 0.85rem;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
         }
         .btn-whatsapp { background: var(--primary); color: white; }
         .btn-site { background: #333; color: white; }
@@ -206,46 +167,187 @@
     <div class="search-box">
         <input type="text" id="searchInput" placeholder="Ex: Farmácia, Pizzaria, Vagas...">
     </div>
-    <a href="https://wa.me/5511991101812" target="_blank" class="anuncie-call">
-        <i class="fas fa-plus-circle"></i> Cadastre sua empresa em nosso guia
-    </a>
 </div>
 
 <div id="vagasSection" class="vagas-info">
     <div class="info-banner">
-        <strong>Painel de Vagas:</strong> Encontre oportunidades aqui. <br>
-        Empresário, anuncie suas vagas! 
-        <a href="https://wa.me/5511991101812" target="_blank" style="color:var(--info); font-weight:bold;">Clique aqui e anuncie.</a>
+        <strong>Painel de Vagas:</strong> Oportunidades atualizadas.
     </div>
 </div>
 
 <div id="plantaoSection" class="plantao-info">
     <div class="info-banner plantao-banner" id="plantaoConteudo">
-        <strong>Plantão Farmacêutico:</strong> Carregando informações...
+        <strong>Plantão Farmacêutico:</strong> Carregando...
     </div>
 </div>
 
 <div id="categorias" class="cat-container">
     <div class="cat-card" onclick="filter('gastronomia')"><i class="fas fa-utensils"></i><span>Gastronomia</span></div>
     <div class="cat-card" onclick="filter('casa')"><i class="fas fa-tools"></i><span>Casa e Construção</span></div>
-    <div class="cat-card" onclick="filter('veiculos')"><i class="fas fa-car"></i><span>Veículos</span></div>
-    <div class="cat-card" onclick="filter('saude')"><i class="fas fa-heartbeat"></i><span>Saúde e Bem-Estar</span></div>
-    <div class="cat-card" onclick="filter('educacao')"><i class="fas fa-graduation-cap"></i><span>Educação</span></div>
+    <div class="cat-card" onclick="filter('saude')"><i class="fas fa-heartbeat"></i><span>Saúde</span></div>
     <div class="cat-card" onclick="filter('comercio')"><i class="fas fa-shopping-bag"></i><span>Comércio</span></div>
-    <div class="cat-card" onclick="filter('utilidade')"><i class="fas fa-info-circle"></i><span>Utilidade Pública</span></div>
-    <div class="cat-card" onclick="filter('hotelaria')"><i class="fas fa-bed"></i><span>Hotelaria</span></div>
     <div class="cat-card" onclick="filter('servicos')"><i class="fas fa-concierge-bell"></i><span>Serviços</span></div>
-    <div class="cat-card" onclick="filter('outros')"><i class="fas fa-ellipsis-h"></i><span>Outros</span></div>
     <div class="cat-card" onclick="filter('todos')"><i class="fas fa-list"></i><span>Ver Todos</span></div>
 </div>
 
-<div class="grid" id="mainGrid">
-    <p style="grid-column: 1/-1; text-align: center;">Buscando informações em Taguaí...</p>
-</div>
+<div class="grid" id="mainGrid"></div>
 
 <footer>
-    <p>&copy; 2026 Guia de Taguaí - Sua empresa no topo!</p>
+    <p>&copy; 2026 Guia de Taguaí</p>
 </footer>
 
 <script>
-    const SHEET_MAIN_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZF
+    const SHEET_MAIN_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZFyTZG1n2KX2zeQ-0Z1wwYIUTq53P7nuc--mRqXmlWkTTDR2UWUrlsuwKF2FtKB_e/pub?output=csv&gid=0';
+    const SHEET_PLANTAO_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZFyTZG1n2KX2zeQ-0Z1wwYIUTq53P7nuc--mRqXmlWkTTDR2UWUrlsuwKF2FtKB_e/pub?output=csv&gid=1423714860';
+    const SHEET_VAGAS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZFyTZG1n2KX2zeQ-0Z1wwYIUTq53P7nuc--mRqXmlWkTTDR2UWUrlsuwKF2FtKB_e/pub?output=csv&gid=1752510009';
+
+    let dadosOriginais = [];
+    let vagasAtivas = [];
+    let plantaoDoDia = null;
+
+    const normalizar = (t) => t.toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").trim();
+
+    async function carregarDados() {
+        try {
+            const [resMain, resPlantao, resVagas] = await Promise.all([
+                fetch(SHEET_MAIN_URL),
+                fetch(SHEET_PLANTAO_URL),
+                fetch(SHEET_VAGAS_URL)
+            ]);
+
+            processarEmpresas(await resMain.text());
+            processarPlantao(await resPlantao.text());
+            processarVagas(await resVagas.text());
+
+        } catch (e) { console.error("Erro ao carregar dados:", e); }
+    }
+
+    function processarEmpresas(csv) {
+        const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(linha => {
+            return linha.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(campo => campo.trim().replace(/^"|"$/g, ''));
+        });
+        const cabecalho = linhas[0].map(c => c.toLowerCase());
+        dadosOriginais = linhas.slice(1).map(linha => {
+            const getVal = (nome) => linha[cabecalho.indexOf(nome.toLowerCase())] || "";
+            return {
+                nome: getVal("Nome"),
+                cat: getVal("Categoria"),
+                sub: getVal("Subcategoria"),
+                local: `${getVal("Logradouro")}, ${getVal("Número")} - ${getVal("Bairro")}`,
+                zap: getVal("Telefone").replace(/\D/g, ''),
+                telFormatado: getVal("Telefone"),
+                site: getVal("Site"),
+                tags: normalizar(`${getVal("Nome")} ${getVal("Categoria")} ${getVal("Subcategoria")} ${getVal("Tag")}`)
+            };
+        }).filter(item => item.nome);
+        render(dadosOriginais);
+    }
+
+    function processarVagas(csv) {
+        const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(linha => {
+            return linha.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(campo => campo.trim().replace(/^"|"$/g, ''));
+        });
+        
+        const hoje = new Date();
+        vagasAtivas = linhas.slice(1).map(linha => {
+            const [dataIns, titulo, empresa, ramo, atividades, requisitos, local, salario, contato, dias] = linha;
+            
+            // Cálculo de expiração
+            const partes = dataIns.split('/');
+            const dataInicio = new Date(partes[2], partes[1] - 1, partes[0]);
+            const dataFim = new Date(dataInicio);
+            dataFim.setDate(dataInicio.getDate() + parseInt(dias || 0));
+
+            return { titulo, empresa, ramo, atividades, requisitos, local, salario, contato, expirada: hoje > dataFim };
+        }).filter(v => v.titulo && !v.expirada);
+    }
+
+    function processarPlantao(csv) {
+        const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(l => l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        for (let i = 1; i < linhas.length; i++) {
+            const [dataTexto, farmacia] = linhas[i];
+            if(!dataTexto) continue;
+            const partes = dataTexto.split('/');
+            const dataPlanilha = new Date(partes[2], partes[1] - 1, partes[0]);
+            if (dataPlanilha <= hoje) plantaoDoDia = farmacia.replace(/^"|"$/g, '').trim();
+            else break;
+        }
+    }
+
+    function renderVagas() {
+        const grid = document.getElementById('mainGrid');
+        document.getElementById('vagasSection').style.display = 'block';
+        document.getElementById('plantaoSection').style.display = 'none';
+
+        if (vagasAtivas.length === 0) {
+            grid.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Nenhuma vaga ativa no momento.</p>';
+            return;
+        }
+
+        grid.innerHTML = vagasAtivas.map(v => `
+            <div class="card card-vaga">
+                <div class="vaga-header">${v.titulo}</div>
+                <div class="vaga-empresa">${v.empresa} / ${v.ramo}</div>
+                <div class="vaga-detalhe"><span class="vaga-label">Atividades:</span> ${v.atividades}</div>
+                <div class="vaga-detalhe"><span class="vaga-label">Requisitos:</span> ${v.requisitos}</div>
+                <div class="vaga-detalhe"><span class="vaga-label">Local:</span> ${v.local}</div>
+                <div class="vaga-detalhe"><span class="vaga-label">Salário/Benefícios:</span> ${v.salario}</div>
+                <p style="margin-top:15px; font-size:0.85rem; background:#f0f7ff; padding:10px; border-radius:5px;">
+                    <strong>Contato:</strong> Entre em contato com ${v.contato}
+                </p>
+            </div>
+        `).join('');
+    }
+
+    function render(lista) {
+        const grid = document.getElementById('mainGrid');
+        document.getElementById('vagasSection').style.display = 'none';
+        document.getElementById('plantaoSection').style.display = 'none';
+
+        grid.innerHTML = lista.map(item => `
+            <div class="card">
+                <div class="subcat-label">${item.sub || item.cat}</div>
+                <h3>${item.nome}</h3>
+                <span class="badge">${item.cat}</span>
+                <p style="font-size:0.8rem; color:#666; margin:0">📍 ${item.local}</p>
+                ${item.telFormatado ? `<p style="font-size:0.8rem; color:#666; margin:4px 0">📞 ${item.telFormatado}</p>` : ''}
+                <div class="btn-container">
+                    ${item.zap ? `<a href="https://wa.me/55${item.zap}" target="_blank" class="btn-action btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : ''}
+                    ${item.site ? `<a href="${item.site}" target="_blank" class="btn-action btn-site"><i class="fas fa-globe"></i> Site</a>` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function mostrarPlantao() {
+        const section = document.getElementById('plantaoSection');
+        const banner = document.getElementById('plantaoConteudo');
+        section.style.display = 'block';
+        
+        if (plantaoDoDia) {
+            const det = dadosOriginais.find(f => normalizar(f.nome) === normalizar(plantaoDoDia));
+            banner.innerHTML = det ? `
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                    <div><strong>🚨 PLANTÃO: ${det.nome.toUpperCase()}</strong><br><small>📍 ${det.local}</small></div>
+                    <a href="https://wa.me/55${det.zap}" target="_blank" class="btn-action btn-whatsapp" style="flex:none; padding:8px 15px;">WHATSAPP</a>
+                </div>` : `<strong>🚨 PLANTÃO:</strong> ${plantaoDoDia}`;
+        }
+        render(dadosOriginais.filter(d => d.cat.toLowerCase().includes('saude')));
+    }
+
+    document.getElementById('vagasBtn').onclick = (e) => { e.preventDefault(); renderVagas(); window.scrollTo(0, 500); };
+    document.getElementById('plantaoBtn').onclick = (e) => { e.preventDefault(); mostrarPlantao(); window.scrollTo(0, 500); };
+    
+    function filter(c) {
+        if(c === 'todos') render(dadosOriginais);
+        else render(dadosOriginais.filter(d => normalizar(d.cat).includes(normalizar(c))));
+        window.scrollTo(0, 500);
+    }
+
+    carregarDados();
+</script>
+</body>
+</html>
