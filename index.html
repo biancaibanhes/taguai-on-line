@@ -112,7 +112,7 @@
             max-width: 1200px;
             margin: 10px auto;
             padding: 0 20px;
-            display: none;
+            display: none; /* Controlado pelo JS */
         }
         .info-banner {
             background: #e1f5fe;
@@ -221,7 +221,7 @@
 
 <div id="plantaoSection" class="plantao-info">
     <div class="info-banner plantao-banner" id="plantaoConteudo">
-        <strong>Plantão Farmacêutico:</strong> Carregando informações de plantão...
+        <strong>Plantão Farmacêutico:</strong> Carregando informações...
     </div>
 </div>
 
@@ -248,10 +248,7 @@
 </footer>
 
 <script>
-    // URL da aba principal (gid=0)
     const SHEET_MAIN_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZFyTZG1n2KX2zeQ-0Z1wwYIUTq53P7nuc--mRqXmlWkTTDR2UWUrlsuwKF2FtKB_e/pub?output=csv&gid=0';
-    
-    // URL da aba Plantão (usando o seu GID: 1423714860)
     const SHEET_PLANTAO_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZFyTZG1n2KX2zeQ-0Z1wwYIUTq53P7nuc--mRqXmlWkTTDR2UWUrlsuwKF2FtKB_e/pub?output=csv&gid=1423714860';
 
     let dadosOriginais = [];
@@ -314,22 +311,20 @@
         for (let i = 1; i < matrizPlantao.length; i++) {
             const [dataTexto, farmacia] = matrizPlantao[i];
             if(!dataTexto) continue;
-
             const partes = dataTexto.split('/');
             const dataPlanilha = new Date(partes[2], partes[1] - 1, partes[0]);
-
             if (dataPlanilha <= hoje) {
                 plantaoNome = farmacia;
-            } else {
-                break; 
-            }
+            } else { break; }
         }
 
-        const banner = document.getElementById('plantaoConteudo');
-        
         if (plantaoNome) {
-            // BUSCA OS DETALHES (Endereço e Zap) na lista que já carregamos
             const detalhes = dadosOriginais.find(f => normalizar(f.nome) === normalizar(plantaoNome));
+            const banner = document.getElementById('plantaoConteudo');
+            const section = document.getElementById('plantaoSection');
+            
+            // AUTOMÁTICO: Mostra o banner se houver plantão identificado
+            section.style.display = 'block';
 
             if (detalhes) {
                 banner.innerHTML = `
@@ -338,7 +333,7 @@
                             <strong>🚨 PLANTÃO HOJE: ${detalhes.nome.toUpperCase()}</strong><br>
                             <small>📍 ${detalhes.local}</small>
                         </div>
-                        <a href="https://wa.me/55${detalhes.zap}?text=Olá! Vi que vocês estão de plantão hoje." 
+                        <a href="https://wa.me/55${detalhes.zap}?text=Olá! Vi no Guia que vocês estão de plantão." 
                            target="_blank" 
                            style="background: #25d366; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.8rem;">
                            <i class="fab fa-whatsapp"></i> WHATSAPP
@@ -346,20 +341,23 @@
                     </div>
                 `;
             } else {
-                banner.innerHTML = `<strong>🚨 PLANTÃO HOJE:</strong> ${plantaoNome} (Endereço não localizado)`;
+                banner.innerHTML = `<strong>🚨 PLANTÃO HOJE:</strong> ${plantaoNome} (Dados de endereço não localizados)`;
             }
-        } else {
-            banner.innerHTML = `<strong>🚨 Plantão:</strong> Verifique a escala local.`;
         }
     }
 
-    function render(lista, isVagas = false, isPlantao = false) {
+    function render(lista, isVagas = false, isPlantaoReset = false) {
         const grid = document.getElementById('mainGrid');
-        document.getElementById('vagasSection').style.display = isVagas ? 'block' : 'none';
-        document.getElementById('plantaoSection').style.display = isPlantao ? 'block' : 'none';
+        const vSection = document.getElementById('vagasSection');
+        const pSection = document.getElementById('plantaoSection');
+        
+        vSection.style.display = isVagas ? 'block' : 'none';
+        
+        // Se for um filtro manual de plantão, mantemos a seção aberta
+        if(isPlantaoReset) pSection.style.display = 'block';
 
         if (lista.length === 0) {
-            grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Nenhum resultado encontrado para esta seleção.</p>';
+            grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Nenhum resultado encontrado.</p>';
             return;
         }
 
@@ -380,6 +378,13 @@
         `).join('');
     }
 
+    // Função de Rolagem Suave
+    function scrollToResults() {
+        const container = document.getElementById('categorias');
+        const offset = container.offsetTop + container.offsetHeight;
+        window.scrollTo({ top: offset - 70, behavior: 'smooth' });
+    }
+
     document.getElementById('searchInput').addEventListener('input', (e) => {
         const t = normalizar(e.target.value);
         render(dadosOriginais.filter(d => d.tags.includes(t)), t.includes('vaga') || t.includes('emprego'));
@@ -388,17 +393,20 @@
     function filter(c) {
         if(c === 'todos') render(dadosOriginais);
         else render(dadosOriginais.filter(d => normalizar(d.cat).includes(normalizar(c))));
+        scrollToResults();
     }
 
     document.getElementById('plantaoBtn').onclick = (e) => {
         e.preventDefault();
         const plantaoItems = dadosOriginais.filter(d => d.tags.includes('plantao') || d.tags.includes('emergencia') || d.cat.toLowerCase().includes('saude'));
         render(plantaoItems, false, true);
+        scrollToResults();
     };
 
     document.getElementById('vagasBtn').onclick = (e) => {
         e.preventDefault();
         render(dadosOriginais.filter(d => d.tags.includes('vaga') || d.tags.includes('emprego')), true);
+        scrollToResults();
     };
 
     carregarDados();
