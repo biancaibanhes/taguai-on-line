@@ -134,6 +134,15 @@
         .vaga-detalhe { font-size: 0.85rem; margin-bottom: 8px; color: #444; }
         .vaga-label { font-weight: bold; color: #222; }
 
+        .subcat-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--secondary);
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
         .btn-container { display: flex; gap: 10px; margin-top: 15px; }
         .btn-action {
             flex: 1; text-align: center; padding: 10px; text-decoration: none;
@@ -171,7 +180,7 @@
 
 <div id="vagasSection" class="vagas-info">
     <div class="info-banner">
-        <strong>Painel de Vagas:</strong> Oportunidades atualizadas.
+        <strong>Painel de Vagas:</strong> Oportunidades atualizadas empresários anunciem conosco!
     </div>
 </div>
 
@@ -184,9 +193,14 @@
 <div id="categorias" class="cat-container">
     <div class="cat-card" onclick="filter('gastronomia')"><i class="fas fa-utensils"></i><span>Gastronomia</span></div>
     <div class="cat-card" onclick="filter('casa')"><i class="fas fa-tools"></i><span>Casa e Construção</span></div>
-    <div class="cat-card" onclick="filter('saude')"><i class="fas fa-heartbeat"></i><span>Saúde</span></div>
-    <div class="cat-card" onclick="filter('comercio')"><i class="fas fa-shopping-bag"></i><span>Comércio</span></div>
+    <div class="cat-card" onclick="filter('veiculos')"><i class="fas fa-car"></i><span>Veículos</span></div>
+    <div class="cat-card" onclick="filter('saude')"><i class="fas fa-heartbeat"></i><span>Saúde e Bem-Estar</span></div>
+    <div class="cat-card" onclick="filter('educacao')"><i class="fas fa-graduation-cap"></i><span>Educação</span></div>
+    <div class="cat-card" onclick="filter('comercio')"><i class="fas fa-store"></i><span>Comércio</span></div>
+    <div class="cat-card" onclick="filter('utilidade')"><i class="fas fa-info-circle"></i><span>Utilidade Pública</span></div>
+    <div class="cat-card" onclick="filter('hotelaria')"><i class="fas fa-bed"></i><span>Hotelaria</span></div>
     <div class="cat-card" onclick="filter('servicos')"><i class="fas fa-concierge-bell"></i><span>Serviços</span></div>
+    <div class="cat-card" onclick="filter('outros')"><i class="fas fa-ellipsis-h"></i><span>Outros</span></div>
     <div class="cat-card" onclick="filter('todos')"><i class="fas fa-list"></i><span>Ver Todos</span></div>
 </div>
 
@@ -214,12 +228,10 @@
                 fetch(SHEET_PLANTAO_URL),
                 fetch(SHEET_VAGAS_URL)
             ]);
-
             processarEmpresas(await resMain.text());
             processarPlantao(await resPlantao.text());
             processarVagas(await resVagas.text());
-
-        } catch (e) { console.error("Erro ao carregar dados:", e); }
+        } catch (e) { console.error("Erro:", e); }
     }
 
     function processarEmpresas(csv) {
@@ -247,26 +259,22 @@
         const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(linha => {
             return linha.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(campo => campo.trim().replace(/^"|"$/g, ''));
         });
-        
         const hoje = new Date();
         vagasAtivas = linhas.slice(1).map(linha => {
             const [dataIns, titulo, empresa, ramo, atividades, requisitos, local, salario, contato, dias] = linha;
-            
-            // Cálculo de expiração
+            if(!dataIns || !dias) return null;
             const partes = dataIns.split('/');
             const dataInicio = new Date(partes[2], partes[1] - 1, partes[0]);
             const dataFim = new Date(dataInicio);
-            dataFim.setDate(dataInicio.getDate() + parseInt(dias || 0));
-
+            dataFim.setDate(dataInicio.getDate() + parseInt(dias));
             return { titulo, empresa, ramo, atividades, requisitos, local, salario, contato, expirada: hoje > dataFim };
-        }).filter(v => v.titulo && !v.expirada);
+        }).filter(v => v && v.titulo && !v.expirada);
     }
 
     function processarPlantao(csv) {
         const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(l => l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0);
-
         for (let i = 1; i < linhas.length; i++) {
             const [dataTexto, farmacia] = linhas[i];
             if(!dataTexto) continue;
@@ -277,36 +285,40 @@
         }
     }
 
+    function smoothScroll() {
+        const target = document.getElementById('mainGrid');
+        const offset = target.getBoundingClientRect().top + window.pageYOffset - 100;
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+
     function renderVagas() {
         const grid = document.getElementById('mainGrid');
         document.getElementById('vagasSection').style.display = 'block';
         document.getElementById('plantaoSection').style.display = 'none';
-
         if (vagasAtivas.length === 0) {
-            grid.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Nenhuma vaga ativa no momento.</p>';
-            return;
+            grid.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Nenhuma vaga ativa.</p>';
+        } else {
+            grid.innerHTML = vagasAtivas.map(v => `
+                <div class="card card-vaga">
+                    <div class="vaga-header">${v.titulo}</div>
+                    <div class="vaga-empresa">${v.empresa} / ${v.ramo}</div>
+                    <div class="vaga-detalhe"><span class="vaga-label">Atividades:</span> ${v.atividades}</div>
+                    <div class="vaga-detalhe"><span class="vaga-label">Requisitos:</span> ${v.requisitos}</div>
+                    <div class="vaga-detalhe"><span class="vaga-label">Local:</span> ${v.local}</div>
+                    <div class="vaga-detalhe"><span class="vaga-label">Salário/Benefícios:</span> ${v.salario}</div>
+                    <p style="margin-top:15px; font-size:0.85rem; background:#f0f7ff; padding:10px; border-radius:5px;">
+                        <strong>Contato:</strong> ${v.contato}
+                    </p>
+                </div>
+            `).join('');
         }
-
-        grid.innerHTML = vagasAtivas.map(v => `
-            <div class="card card-vaga">
-                <div class="vaga-header">${v.titulo}</div>
-                <div class="vaga-empresa">${v.empresa} / ${v.ramo}</div>
-                <div class="vaga-detalhe"><span class="vaga-label">Atividades:</span> ${v.atividades}</div>
-                <div class="vaga-detalhe"><span class="vaga-label">Requisitos:</span> ${v.requisitos}</div>
-                <div class="vaga-detalhe"><span class="vaga-label">Local:</span> ${v.local}</div>
-                <div class="vaga-detalhe"><span class="vaga-label">Salário/Benefícios:</span> ${v.salario}</div>
-                <p style="margin-top:15px; font-size:0.85rem; background:#f0f7ff; padding:10px; border-radius:5px;">
-                    <strong>Contato:</strong> Entre em contato com ${v.contato}
-                </p>
-            </div>
-        `).join('');
+        smoothScroll();
     }
 
     function render(lista) {
         const grid = document.getElementById('mainGrid');
         document.getElementById('vagasSection').style.display = 'none';
         document.getElementById('plantaoSection').style.display = 'none';
-
         grid.innerHTML = lista.map(item => `
             <div class="card">
                 <div class="subcat-label">${item.sub || item.cat}</div>
@@ -323,10 +335,8 @@
     }
 
     function mostrarPlantao() {
-        const section = document.getElementById('plantaoSection');
         const banner = document.getElementById('plantaoConteudo');
-        section.style.display = 'block';
-        
+        document.getElementById('plantaoSection').style.display = 'block';
         if (plantaoDoDia) {
             const det = dadosOriginais.find(f => normalizar(f.nome) === normalizar(plantaoDoDia));
             banner.innerHTML = det ? `
@@ -335,17 +345,23 @@
                     <a href="https://wa.me/55${det.zap}" target="_blank" class="btn-action btn-whatsapp" style="flex:none; padding:8px 15px;">WHATSAPP</a>
                 </div>` : `<strong>🚨 PLANTÃO:</strong> ${plantaoDoDia}`;
         }
-        render(dadosOriginais.filter(d => d.cat.toLowerCase().includes('saude')));
+        render(dadosOriginais.filter(d => normalizar(d.cat).includes('saude')));
+        smoothScroll();
     }
 
-    document.getElementById('vagasBtn').onclick = (e) => { e.preventDefault(); renderVagas(); window.scrollTo(0, 500); };
-    document.getElementById('plantaoBtn').onclick = (e) => { e.preventDefault(); mostrarPlantao(); window.scrollTo(0, 500); };
+    document.getElementById('vagasBtn').onclick = (e) => { e.preventDefault(); renderVagas(); };
+    document.getElementById('plantaoBtn').onclick = (e) => { e.preventDefault(); mostrarPlantao(); };
     
     function filter(c) {
         if(c === 'todos') render(dadosOriginais);
         else render(dadosOriginais.filter(d => normalizar(d.cat).includes(normalizar(c))));
-        window.scrollTo(0, 500);
+        smoothScroll();
     }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const t = normalizar(e.target.value);
+        render(dadosOriginais.filter(d => d.tags.includes(t)));
+    });
 
     carregarDados();
 </script>
