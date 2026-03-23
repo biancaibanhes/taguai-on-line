@@ -217,9 +217,9 @@
 
     let dadosOriginais = [];
     let vagasAtivas = [];
-    let plantaoDoDia = null;
+    let plantaoNomeDoDia = null;
 
-    const normalizar = (t) => t.toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").trim();
+    const normalizar = (t) => t ? t.toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").trim() : "";
 
     async function carregarDados() {
         try {
@@ -228,16 +228,15 @@
                 fetch(SHEET_PLANTAO_URL),
                 fetch(SHEET_VAGAS_URL)
             ]);
+
             processarEmpresas(await resMain.text());
             processarPlantao(await resPlantao.text());
             processarVagas(await resVagas.text());
-        } catch (e) { console.error("Erro:", e); }
+        } catch (e) { console.error("Erro Geral:", e); }
     }
 
     function processarEmpresas(csv) {
-        const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(linha => {
-            return linha.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(campo => campo.trim().replace(/^"|"$/g, ''));
-        });
+        const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(l => l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, '')));
         const cabecalho = linhas[0].map(c => c.toLowerCase());
         dadosOriginais = linhas.slice(1).map(linha => {
             const getVal = (nome) => linha[cabecalho.indexOf(nome.toLowerCase())] || "";
@@ -256,38 +255,42 @@
     }
 
     function processarVagas(csv) {
-        const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(linha => {
-            return linha.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(campo => campo.trim().replace(/^"|"$/g, ''));
-        });
+        const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(l => l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, '')));
         const hoje = new Date();
+        hoje.setHours(0,0,0,0);
+
         vagasAtivas = linhas.slice(1).map(linha => {
-            const [dataIns, titulo, empresa, ramo, atividades, requisitos, local, salario, contato, dias] = linha;
-            if(!dataIns || !dias) return null;
+            // Mapeamento baseado na imagem enviada (9 colunas)
+            const [dataIns, titulo, empresaRamo, atividades, requisitos, local, salario, contato, dias] = linha;
+            
+            if(!dataIns || !titulo) return null;
+
             const partes = dataIns.split('/');
             const dataInicio = new Date(partes[2], partes[1] - 1, partes[0]);
             const dataFim = new Date(dataInicio);
-            dataFim.setDate(dataInicio.getDate() + parseInt(dias));
-            return { titulo, empresa, ramo, atividades, requisitos, local, salario, contato, expirada: hoje > dataFim };
-        }).filter(v => v && v.titulo && !v.expirada);
+            dataFim.setDate(dataInicio.getDate() + parseInt(dias || 0));
+
+            return { titulo, empresaRamo, atividades, requisitos, local, salario, contato, expirada: hoje > dataFim };
+        }).filter(v => v && !v.expirada);
     }
 
     function processarPlantao(csv) {
-        const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(l => l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
+        const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(l => l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, '')));
         const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0);
+        hoje.setHours(0,0,0,0);
+
         for (let i = 1; i < linhas.length; i++) {
             const [dataTexto, farmacia] = linhas[i];
-            if(!dataTexto) continue;
             const partes = dataTexto.split('/');
             const dataPlanilha = new Date(partes[2], partes[1] - 1, partes[0]);
-            if (dataPlanilha <= hoje) plantaoDoDia = farmacia.replace(/^"|"$/g, '').trim();
+            if (dataPlanilha <= hoje) plantaoNomeDoDia = farmacia;
             else break;
         }
     }
 
     function smoothScroll() {
         const target = document.getElementById('mainGrid');
-        const offset = target.getBoundingClientRect().top + window.pageYOffset - 100;
+        const offset = target.getBoundingClientRect().top + window.pageYOffset - 120;
         window.scrollTo({ top: offset, behavior: 'smooth' });
     }
 
@@ -295,18 +298,19 @@
         const grid = document.getElementById('mainGrid');
         document.getElementById('vagasSection').style.display = 'block';
         document.getElementById('plantaoSection').style.display = 'none';
+
         if (vagasAtivas.length === 0) {
-            grid.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Nenhuma vaga ativa.</p>';
+            grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; padding:20px;">Nenhuma vaga aberta no momento.</p>';
         } else {
             grid.innerHTML = vagasAtivas.map(v => `
                 <div class="card card-vaga">
                     <div class="vaga-header">${v.titulo}</div>
-                    <div class="vaga-empresa">${v.empresa} / ${v.ramo}</div>
+                    <div class="vaga-empresa">${v.empresaRamo}</div>
                     <div class="vaga-detalhe"><span class="vaga-label">Atividades:</span> ${v.atividades}</div>
                     <div class="vaga-detalhe"><span class="vaga-label">Requisitos:</span> ${v.requisitos}</div>
                     <div class="vaga-detalhe"><span class="vaga-label">Local:</span> ${v.local}</div>
-                    <div class="vaga-detalhe"><span class="vaga-label">Salário/Benefícios:</span> ${v.salario}</div>
-                    <p style="margin-top:15px; font-size:0.85rem; background:#f0f7ff; padding:10px; border-radius:5px;">
+                    <div class="vaga-detalhe"><span class="vaga-label">Salário:</span> ${v.salario}</div>
+                    <p style="margin-top:15px; font-size:0.85rem; background:#e1f5fe; padding:10px; border-radius:5px; border-left:4px solid var(--info);">
                         <strong>Contato:</strong> ${v.contato}
                     </p>
                 </div>
@@ -315,10 +319,29 @@
         smoothScroll();
     }
 
+    function mostrarPlantao() {
+        const banner = document.getElementById('plantaoConteudo');
+        document.getElementById('plantaoSection').style.display = 'block';
+        document.getElementById('vagasSection').style.display = 'none';
+
+        if (plantaoNomeDoDia) {
+            const det = dadosOriginais.find(f => normalizar(f.nome) === normalizar(plantaoNomeDoDia));
+            if(det) {
+                banner.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                    <div><strong>🚨 PLANTÃO: ${det.nome.toUpperCase()}</strong><br><small>📍 ${det.local}</small></div>
+                    <a href="https://wa.me/55${det.zap}" target="_blank" class="btn-action btn-whatsapp" style="flex:none; padding:8px 15px; width:auto;">WHATSAPP</a>
+                </div>`;
+            } else {
+                banner.innerHTML = `<strong>🚨 PLANTÃO HOJE:</strong> ${plantaoNomeDoDia} (Endereço não cadastrado)`;
+            }
+        }
+        render(dadosOriginais.filter(d => normalizar(d.cat).includes('saude')));
+        smoothScroll();
+    }
+
     function render(lista) {
         const grid = document.getElementById('mainGrid');
-        document.getElementById('vagasSection').style.display = 'none';
-        document.getElementById('plantaoSection').style.display = 'none';
         grid.innerHTML = lista.map(item => `
             <div class="card">
                 <div class="subcat-label">${item.sub || item.cat}</div>
@@ -334,36 +357,20 @@
         `).join('');
     }
 
-    function mostrarPlantao() {
-        const banner = document.getElementById('plantaoConteudo');
-        document.getElementById('plantaoSection').style.display = 'block';
-        if (plantaoDoDia) {
-            const det = dadosOriginais.find(f => normalizar(f.nome) === normalizar(plantaoDoDia));
-            banner.innerHTML = det ? `
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                    <div><strong>🚨 PLANTÃO: ${det.nome.toUpperCase()}</strong><br><small>📍 ${det.local}</small></div>
-                    <a href="https://wa.me/55${det.zap}" target="_blank" class="btn-action btn-whatsapp" style="flex:none; padding:8px 15px;">WHATSAPP</a>
-                </div>` : `<strong>🚨 PLANTÃO:</strong> ${plantaoDoDia}`;
-        }
-        render(dadosOriginais.filter(d => normalizar(d.cat).includes('saude')));
-        smoothScroll();
-    }
-
-    document.getElementById('vagasBtn').onclick = (e) => { e.preventDefault(); renderVagas(); };
-    document.getElementById('plantaoBtn').onclick = (e) => { e.preventDefault(); mostrarPlantao(); };
-    
     function filter(c) {
+        document.getElementById('vagasSection').style.display = 'none';
+        document.getElementById('plantaoSection').style.display = 'none';
         if(c === 'todos') render(dadosOriginais);
         else render(dadosOriginais.filter(d => normalizar(d.cat).includes(normalizar(c))));
         smoothScroll();
     }
 
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        const t = normalizar(e.target.value);
-        render(dadosOriginais.filter(d => d.tags.includes(t)));
-    });
+    document.getElementById('vagasBtn').onclick = (e) => { e.preventDefault(); renderVagas(); };
+    document.getElementById('plantaoBtn').onclick = (e) => { e.preventDefault(); mostrarPlantao(); };
+    document.getElementById('searchInput').oninput = (e) => render(dadosOriginais.filter(d => d.tags.includes(normalizar(e.target.value))));
 
     carregarDados();
 </script>
+    
 </body>
 </html>
