@@ -12,6 +12,7 @@
             --secondary: #0047AB;
             --danger: #d63031;
             --info: #0984e3;
+            --warning: #f1c40f;
             --bg: #f8f9fa;
             --white: #ffffff;
             --dark: #333333;
@@ -44,7 +45,7 @@
         .nav-links a {
             text-decoration: none;
             color: #555;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
         }
 
@@ -56,6 +57,7 @@
         .btn-vagas { background: var(--info); }
         .btn-plantao { background: var(--danger); animation: pulse 2s infinite; }
         .btn-cadastro-top { color: var(--primary) !important; border: 1px solid var(--primary); padding: 5px 10px; border-radius: 15px; }
+        .btn-erro-top { color: #888 !important; font-size: 0.65rem !important; }
 
         @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
 
@@ -86,7 +88,6 @@
             border-radius: 20px;
             transition: 0.3s;
         }
-        .anuncie-call:hover { background: var(--primary); }
 
         .cat-container {
             display: grid;
@@ -106,7 +107,6 @@
             border: 1px solid #eee;
             transition: 0.2s;
         }
-        .cat-card:hover { border-color: var(--secondary); background: #f0f7ff; }
         .cat-card i { font-size: 1.5rem; display: block; margin-bottom: 5px; color: var(--secondary); }
         .cat-card span { font-size: 0.7rem; font-weight: 600; line-height: 1.1; display: block; }
 
@@ -122,7 +122,6 @@
             border-radius: 10px;
             border-left: 5px solid var(--info);
             font-size: 0.95rem;
-            line-height: 1.5;
         }
         .plantao-banner { background: #ffebee; border-left-color: var(--danger); }
 
@@ -141,20 +140,17 @@
             padding: 20px;
             border-top: 4px solid var(--secondary);
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
         }
 
         .card-vaga { border-top-color: var(--info); }
         .vaga-header { font-weight: bold; font-size: 1.2rem; color: var(--info); margin-bottom: 5px; }
-        .vaga-empresa { font-size: 0.9rem; font-weight: 600; color: #555; margin-bottom: 10px; }
-        .vaga-detalhe { font-size: 0.85rem; margin-bottom: 8px; color: #444; }
-        .vaga-label { font-weight: bold; color: #222; }
 
         .subcat-label {
             font-size: 0.65rem;
             text-transform: uppercase;
             font-weight: 800;
             color: var(--secondary);
-            letter-spacing: 0.5px;
             margin-bottom: 2px;
         }
 
@@ -167,19 +163,18 @@
         .btn-whatsapp { background: var(--primary); color: white; }
         .btn-site { background: #333; color: white; }
 
-        footer { background: #222; color: white; padding: 30px; margin-top: 50px; text-align: center; }
-        
-        .btn-voltar-inicio {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background: #eee;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #666;
+        .report-error {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #ccc;
+            font-size: 0.75rem;
+            text-decoration: none;
         }
+        .report-error:hover { color: var(--danger); }
+
+        footer { background: #222; color: white; padding: 30px; margin-top: 50px; text-align: center; }
+        .btn-voltar-inicio { display: block; margin: 20px auto; padding: 10px 20px; background: #eee; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; color: #666; }
     </style>
 </head>
 <body>
@@ -193,6 +188,7 @@
         <div class="nav-links">
             <a href="#" onclick="resetView()">Início</a>
             <a href="https://wa.me/5511991101812?text=Quero%20Cadastrar%20meu%20neg%C3%B3cio!%0ANome:%0AEndere%C3%A7o:%0ATelefone:%0ACategoria:%0ASite:" target="_blank" class="btn-cadastro-top">➕ Cadastre-se</a>
+            <a href="https://wa.me/5511991101812?text=Ol%C3%A1!%20Encontrei%20um%20erro%20no%20site%20e%20gostaria%20de%20ajudar%20a%20corrigir." target="_blank" class="btn-erro-top">⚠️ Reportar Erro</a>
             <a href="#" class="btn-nav-special btn-vagas" id="vagasBtn">💼 Vagas</a>
             <a href="#" class="btn-nav-special btn-plantao" id="plantaoBtn">🚨 Plantão</a>
         </div>
@@ -205,17 +201,13 @@
         <input type="text" id="searchInput" placeholder="Ex: Farmácia, Pizzaria, Vagas...">
     </div>
     <a href="https://wa.me/5511991101812?text=Quero%20Cadastrar%20meu%20neg%C3%B3cio!%0ANome:%0AEndere%C3%A7o:%0ATelefone:%0ACategoria:%0ASite:" target="_blank" class="anuncie-call">
-        <i class="fas fa-plus-circle"></i> Cadastre seu negócio gratuitamente no guia
+        <i class="fas fa-plus-circle"></i> Cadastre seu negócio gratuitamente
     </a>
 </div>
 
 <div id="vagasSection" class="vagas-info">
     <div class="info-banner">
-        <strong>Painel de Vagas:</strong> Oportunidades ativas em Taguaí.<br>
-        Empresários, anuncie sua vaga conosco! 
-        <a href="https://wa.me/5511991101812?text=Quero anunciar minha vaga com o Guia de Taguaí" target="_blank" style="color:var(--info); font-weight:bold; text-decoration:underline;">
-            Clique aqui para anunciar no WhatsApp.
-        </a>
+        <strong>Painel de Vagas:</strong> Oportunidades em Taguaí. Empresários, <a href="https://wa.me/5511991101812?text=Quero anunciar minha vaga com o Guia de Taguaí" target="_blank" style="color:var(--info); font-weight:bold;">anunciem aqui.</a>
     </div>
 </div>
 
@@ -245,7 +237,7 @@
 </div>
 
 <footer>
-    <p>&copy; 2026 Guia de Taguaí</p>
+    <p>&copy; 2026 Guia de Taguaí - Facilitando seu dia a dia.</p>
 </footer>
 
 <script>
@@ -328,7 +320,6 @@
         document.getElementById('plantaoSection').style.display = 'none';
         document.getElementById('mainGrid').style.display = 'grid';
         document.getElementById('btnVoltar').style.display = 'block';
-        
         if (vagasAtivas.length === 0) {
             grid.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Nenhuma vaga aberta.</p>';
         } else {
@@ -340,7 +331,7 @@
                     <div class="vaga-detalhe"><span class="vaga-label">Requisitos:</span> ${v.requisitos}</div>
                     <div class="vaga-detalhe"><span class="vaga-label">Local:</span> ${v.local}</div>
                     <div class="vaga-detalhe"><span class="vaga-label">Salário:</span> ${v.salario}</div>
-                    <p style="margin-top:15px; font-size:0.85rem; background:#e1f5fe; padding:10px; border-radius:5px; border-left:4px solid var(--info);">
+                    <p style="margin-top:15px; font-size:0.85rem; background:#e1f5fe; padding:10px; border-radius:5px;">
                         <strong>Contato:</strong> ${v.contato}
                     </p>
                 </div>
@@ -356,7 +347,6 @@
         document.getElementById('vagasSection').style.display = 'none';
         document.getElementById('mainGrid').style.display = 'none';
         document.getElementById('btnVoltar').style.display = 'block';
-        
         if (plantaoNomeDoDia) {
             const det = dadosOriginais.find(f => normalizar(f.nome) === normalizar(plantaoNomeDoDia));
             banner.innerHTML = det ? `
@@ -372,6 +362,10 @@
         const grid = document.getElementById('mainGrid');
         grid.innerHTML = lista.map(item => `
             <div class="card">
+                <a href="https://wa.me/5511991101812?text=Ol%C3%A1!%20Encontrei%20um%20erro%20nas%20informa%C3%A7%C3%B5es%20da%20empresa%20${encodeURIComponent(item.nome)}.%20O%20erro%20%C3%A9%3A" 
+                   target="_blank" class="report-error" title="Reportar erro nesta empresa">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </a>
                 <div class="subcat-label">${item.sub || item.cat}</div>
                 <h3>${item.nome}</h3>
                 <span class="badge">${item.cat}</span>
