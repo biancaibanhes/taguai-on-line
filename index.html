@@ -197,7 +197,7 @@
     <div class="cat-card" onclick="filter('veiculos')"><i class="fas fa-car"></i><span>Veículos</span></div>
     <div class="cat-card" onclick="filter('saude')"><i class="fas fa-heartbeat"></i><span>Saúde e Bem-Estar</span></div>
     <div class="cat-card" onclick="filter('educacao')"><i class="fas fa-graduation-cap"></i><span>Educação</span></div>
-    <div class="cat-card" onclick="filter('comercio')"><i class="fas fa-store"></i><span>Comércio</span></div>
+    <div class="cat-card" onclick="filter('comercio')"><i class="fas fa-shopping-bag"></i><span>Comércio</span></div>
     <div class="cat-card" onclick="filter('utilidade')"><i class="fas fa-info-circle"></i><span>Utilidade Pública</span></div>
     <div class="cat-card" onclick="filter('hotelaria')"><i class="fas fa-bed"></i><span>Hotelaria</span></div>
     <div class="cat-card" onclick="filter('servicos')"><i class="fas fa-concierge-bell"></i><span>Serviços</span></div>
@@ -274,17 +274,6 @@
         }
     }
 
-    function scrollToCategories() {
-        document.getElementById('categorias').style.display = 'grid';
-        const target = document.getElementById('categorias');
-        window.scrollTo({ top: target.offsetTop - 90, behavior: 'smooth' });
-    }
-
-    function scrollToResults() {
-        const target = document.getElementById('mainGrid');
-        window.scrollTo({ top: target.offsetTop - 120, behavior: 'smooth' });
-    }
-
     function resetView() {
         document.getElementById('categorias').style.display = 'grid';
         document.getElementById('vagasSection').style.display = 'none';
@@ -293,9 +282,15 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    function scrollToCategories() {
+        document.getElementById('categorias').style.display = 'grid';
+        const target = document.getElementById('categorias');
+        window.scrollTo({ top: target.offsetTop - 90, behavior: 'smooth' });
+    }
+
     function renderVagas() {
         const grid = document.getElementById('mainGrid');
-        document.getElementById('categorias').style.display = 'none'; // MELHORIA 2: OCULTA CATEGORIAS
+        document.getElementById('categorias').style.display = 'none'; 
         document.getElementById('vagasSection').style.display = 'block';
         document.getElementById('plantaoSection').style.display = 'none';
         
@@ -321,9 +316,10 @@
 
     function mostrarPlantao() {
         const banner = document.getElementById('plantaoConteudo');
-        document.getElementById('categorias').style.display = 'grid';
+        document.getElementById('categorias').style.display = 'none'; // OCULTA CATEGORIAS NO PLANTÃO
         document.getElementById('plantaoSection').style.display = 'block';
         document.getElementById('vagasSection').style.display = 'none';
+        
         if (plantaoNomeDoDia) {
             const det = dadosOriginais.find(f => normalizar(f.nome) === normalizar(plantaoNomeDoDia));
             banner.innerHTML = det ? `
@@ -333,7 +329,7 @@
                 </div>` : `<strong>🚨 PLANTÃO HOJE:</strong> ${plantaoNomeDoDia}`;
         }
         render(dadosOriginais.filter(d => normalizar(d.cat).includes('saude')));
-        scrollToResults();
+        window.scrollTo({ top: document.getElementById('plantaoSection').offsetTop - 100, behavior: 'smooth' });
     }
 
     function render(lista) {
@@ -358,15 +354,16 @@
         document.getElementById('plantaoSection').style.display = 'none';
         if(c === 'todos') render(dadosOriginais);
         else render(dadosOriginais.filter(d => normalizar(d.cat).includes(normalizar(c))));
-        scrollToResults();
+        const target = document.getElementById('mainGrid');
+        window.scrollTo({ top: target.offsetTop - 120, behavior: 'smooth' });
     }
 
     document.getElementById('vagasBtn').onclick = (e) => { e.preventDefault(); renderVagas(); };
     document.getElementById('plantaoBtn').onclick = (e) => { e.preventDefault(); mostrarPlantao(); };
     document.getElementById('searchInput').oninput = (e) => {
         const t = normalizar(e.target.value);
-        if(t === "") { render(dadosOriginais); }
-        else { render(dadosOriginais.filter(d => d.tags.includes(t))); }
+        if(t === "") render(dadosOriginais);
+        else render(dadosOriginais.filter(d => d.tags.includes(t)));
     };
 
     carregarDados();
