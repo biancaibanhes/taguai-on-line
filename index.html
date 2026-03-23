@@ -309,9 +309,8 @@
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0);
 
-        let plantaoAtual = null;
+        let plantaoNome = null;
 
-        // Procura a linha da data correta (mais próxima do dia de hoje sem ultrapassar)
         for (let i = 1; i < matrizPlantao.length; i++) {
             const [dataTexto, farmacia] = matrizPlantao[i];
             if(!dataTexto) continue;
@@ -320,15 +319,35 @@
             const dataPlanilha = new Date(partes[2], partes[1] - 1, partes[0]);
 
             if (dataPlanilha <= hoje) {
-                plantaoAtual = { data: dataTexto, farmacia: farmacia };
+                plantaoNome = farmacia;
             } else {
                 break; 
             }
         }
 
         const banner = document.getElementById('plantaoConteudo');
-        if (plantaoAtual) {
-            banner.innerHTML = `<strong>🚨 Plantão Atual:</strong> ${plantaoAtual.farmacia}`;
+        
+        if (plantaoNome) {
+            // BUSCA OS DETALHES (Endereço e Zap) na lista que já carregamos
+            const detalhes = dadosOriginais.find(f => normalizar(f.nome) === normalizar(plantaoNome));
+
+            if (detalhes) {
+                banner.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <strong>🚨 PLANTÃO HOJE: ${detalhes.nome.toUpperCase()}</strong><br>
+                            <small>📍 ${detalhes.local}</small>
+                        </div>
+                        <a href="https://wa.me/55${detalhes.zap}?text=Olá! Vi que vocês estão de plantão hoje." 
+                           target="_blank" 
+                           style="background: #25d366; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.8rem;">
+                           <i class="fab fa-whatsapp"></i> WHATSAPP
+                        </a>
+                    </div>
+                `;
+            } else {
+                banner.innerHTML = `<strong>🚨 PLANTÃO HOJE:</strong> ${plantaoNome} (Endereço não localizado)`;
+            }
         } else {
             banner.innerHTML = `<strong>🚨 Plantão:</strong> Verifique a escala local.`;
         }
