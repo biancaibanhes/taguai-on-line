@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guia de Taguaí - Suas Páginas Amarelas</title>
+    <title>Guia de Taguaí - Facilitando seu dia a dia.</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
@@ -248,11 +248,11 @@
 </footer>
 
 <script>
-    // URL da aba principal (Contatos/Empresas)
+    // URL da aba principal (gid=0)
     const SHEET_MAIN_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZFyTZG1n2KX2zeQ-0Z1wwYIUTq53P7nuc--mRqXmlWkTTDR2UWUrlsuwKF2FtKB_e/pub?output=csv&gid=0';
     
-    // URL da aba Plantão (ajuste o GID conforme necessário)
-    const SHEET_PLANTAO_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZFyTZG1n2KX2zeQ-0Z1wwYIUTq53P7nuc--mRqXmlWkTTDR2UWUrlsuwKF2FtKB_e/pub?output=csv&gid=gid=1423714860';
+    // URL da aba Plantão (usando o seu GID: 1423714860)
+    const SHEET_PLANTAO_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHcMy5WRgMmTOZFyTZG1n2KX2zeQ-0Z1wwYIUTq53P7nuc--mRqXmlWkTTDR2UWUrlsuwKF2FtKB_e/pub?output=csv&gid=1423714860';
 
     let dadosOriginais = [];
 
@@ -302,16 +302,35 @@
 
     function processarPlantao(csv) {
         const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "");
-        if (linhas.length > 1) {
-            const dados = linhas[1].split(/,(?=(?:(?:[^"]*"){2})*[^3]*$)/).map(c => c.trim().replace(/^"|"$/g, ''));
-            // Supondo: Coluna A = Data Início, Coluna B = Farmácia
-            const dataInicio = dados[0] || "Não informada";
-            const farmacia = dados[1] || "Consultar guia";
-            
-            document.getElementById('plantaoConteudo').innerHTML = `
-                <strong>🚨 Plantão Atual:</strong> ${farmacia} <br>
-                <small>Iniciado em: ${dataInicio}</small>
-            `;
+        const matrizPlantao = linhas.map(linha => {
+            return linha.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ''));
+        });
+
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        let plantaoAtual = null;
+
+        // Procura a linha da data correta (mais próxima do dia de hoje sem ultrapassar)
+        for (let i = 1; i < matrizPlantao.length; i++) {
+            const [dataTexto, farmacia] = matrizPlantao[i];
+            if(!dataTexto) continue;
+
+            const partes = dataTexto.split('/');
+            const dataPlanilha = new Date(partes[2], partes[1] - 1, partes[0]);
+
+            if (dataPlanilha <= hoje) {
+                plantaoAtual = { data: dataTexto, farmacia: farmacia };
+            } else {
+                break; 
+            }
+        }
+
+        const banner = document.getElementById('plantaoConteudo');
+        if (plantaoAtual) {
+            banner.innerHTML = `<strong>🚨 Plantão Atual:</strong> ${plantaoAtual.farmacia} <br><small>Escala iniciada em: ${plantaoAtual.data}</small>`;
+        } else {
+            banner.innerHTML = `<strong>🚨 Plantão:</strong> Verifique a escala local ou ligue 190.`;
         }
     }
 
