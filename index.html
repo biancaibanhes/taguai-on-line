@@ -159,14 +159,15 @@
 
 <header>
     <nav>
-        <a href="#" class="logo-container">
+        <a href="#" class="logo-container" onclick="resetView()">
             <img src="brasao.jpg" alt="Brasão" class="brasao">
             <span class="logo-text">Guia de Taguaí</span>
         </a>
         <div class="nav-links">
-            <a href="#categorias">Categorias</a>
+            <a href="#" onclick="resetView()">Início</a>
+            <a href="#" onclick="scrollToCategories()">Categorias</a>
             <a href="#" class="btn-nav-special btn-vagas" id="vagasBtn">💼 Vagas</a>
-            <a href="#plantao" class="btn-nav-special btn-plantao" id="plantaoBtn">🚨 Plantão</a>
+            <a href="#" class="btn-nav-special btn-plantao" id="plantaoBtn">🚨 Plantão</a>
         </div>
     </nav>
 </header>
@@ -180,7 +181,7 @@
 
 <div id="vagasSection" class="vagas-info">
     <div class="info-banner">
-        <strong>Painel de Vagas:</strong> Oportunidades atualizadas empresários anunciem conosco!
+        <strong>Painel de Vagas:</strong> Oportunidades ativas em Taguaí.
     </div>
 </div>
 
@@ -224,31 +225,24 @@
     async function carregarDados() {
         try {
             const [resMain, resPlantao, resVagas] = await Promise.all([
-                fetch(SHEET_MAIN_URL),
-                fetch(SHEET_PLANTAO_URL),
-                fetch(SHEET_VAGAS_URL)
+                fetch(SHEET_MAIN_URL), fetch(SHEET_PLANTAO_URL), fetch(SHEET_VAGAS_URL)
             ]);
-
             processarEmpresas(await resMain.text());
             processarPlantao(await resPlantao.text());
             processarVagas(await resVagas.text());
-        } catch (e) { console.error("Erro Geral:", e); }
+        } catch (e) { console.error(e); }
     }
 
     function processarEmpresas(csv) {
         const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(l => l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, '')));
         const cabecalho = linhas[0].map(c => c.toLowerCase());
         dadosOriginais = linhas.slice(1).map(linha => {
-            const getVal = (nome) => linha[cabecalho.indexOf(nome.toLowerCase())] || "";
+            const getVal = (n) => linha[cabecalho.indexOf(n.toLowerCase())] || "";
             return {
-                nome: getVal("Nome"),
-                cat: getVal("Categoria"),
-                sub: getVal("Subcategoria"),
+                nome: getVal("Nome"), cat: getVal("Categoria"), sub: getVal("Subcategoria"),
                 local: `${getVal("Logradouro")}, ${getVal("Número")} - ${getVal("Bairro")}`,
-                zap: getVal("Telefone").replace(/\D/g, ''),
-                telFormatado: getVal("Telefone"),
-                site: getVal("Site"),
-                tags: normalizar(`${getVal("Nome")} ${getVal("Categoria")} ${getVal("Subcategoria")} ${getVal("Tag")}`)
+                zap: getVal("Telefone").replace(/\D/g, ''), telFormatado: getVal("Telefone"),
+                site: getVal("Site"), tags: normalizar(`${getVal("Nome")} ${getVal("Categoria")} ${getVal("Subcategoria")} ${getVal("Tag")}`)
             };
         }).filter(item => item.nome);
         render(dadosOriginais);
@@ -256,29 +250,21 @@
 
     function processarVagas(csv) {
         const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(l => l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, '')));
-        const hoje = new Date();
-        hoje.setHours(0,0,0,0);
-
+        const hoje = new Date(); hoje.setHours(0,0,0,0);
         vagasAtivas = linhas.slice(1).map(linha => {
-            // Mapeamento baseado na imagem enviada (9 colunas)
             const [dataIns, titulo, empresaRamo, atividades, requisitos, local, salario, contato, dias] = linha;
-            
             if(!dataIns || !titulo) return null;
-
             const partes = dataIns.split('/');
             const dataInicio = new Date(partes[2], partes[1] - 1, partes[0]);
             const dataFim = new Date(dataInicio);
             dataFim.setDate(dataInicio.getDate() + parseInt(dias || 0));
-
             return { titulo, empresaRamo, atividades, requisitos, local, salario, contato, expirada: hoje > dataFim };
         }).filter(v => v && !v.expirada);
     }
 
     function processarPlantao(csv) {
         const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "").map(l => l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, '')));
-        const hoje = new Date();
-        hoje.setHours(0,0,0,0);
-
+        const hoje = new Date(); hoje.setHours(0,0,0,0);
         for (let i = 1; i < linhas.length; i++) {
             const [dataTexto, farmacia] = linhas[i];
             const partes = dataTexto.split('/');
@@ -288,19 +274,33 @@
         }
     }
 
-    function smoothScroll() {
+    function scrollToCategories() {
+        document.getElementById('categorias').style.display = 'grid';
+        const target = document.getElementById('categorias');
+        window.scrollTo({ top: target.offsetTop - 90, behavior: 'smooth' });
+    }
+
+    function scrollToResults() {
         const target = document.getElementById('mainGrid');
-        const offset = target.getBoundingClientRect().top + window.pageYOffset - 120;
-        window.scrollTo({ top: offset, behavior: 'smooth' });
+        window.scrollTo({ top: target.offsetTop - 120, behavior: 'smooth' });
+    }
+
+    function resetView() {
+        document.getElementById('categorias').style.display = 'grid';
+        document.getElementById('vagasSection').style.display = 'none';
+        document.getElementById('plantaoSection').style.display = 'none';
+        render(dadosOriginais);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function renderVagas() {
         const grid = document.getElementById('mainGrid');
+        document.getElementById('categorias').style.display = 'none'; // MELHORIA 2: OCULTA CATEGORIAS
         document.getElementById('vagasSection').style.display = 'block';
         document.getElementById('plantaoSection').style.display = 'none';
-
+        
         if (vagasAtivas.length === 0) {
-            grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; padding:20px;">Nenhuma vaga aberta no momento.</p>';
+            grid.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Nenhuma vaga aberta.</p>';
         } else {
             grid.innerHTML = vagasAtivas.map(v => `
                 <div class="card card-vaga">
@@ -316,28 +316,24 @@
                 </div>
             `).join('');
         }
-        smoothScroll();
+        window.scrollTo({ top: document.getElementById('vagasSection').offsetTop - 100, behavior: 'smooth' });
     }
 
     function mostrarPlantao() {
         const banner = document.getElementById('plantaoConteudo');
+        document.getElementById('categorias').style.display = 'grid';
         document.getElementById('plantaoSection').style.display = 'block';
         document.getElementById('vagasSection').style.display = 'none';
-
         if (plantaoNomeDoDia) {
             const det = dadosOriginais.find(f => normalizar(f.nome) === normalizar(plantaoNomeDoDia));
-            if(det) {
-                banner.innerHTML = `
+            banner.innerHTML = det ? `
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                     <div><strong>🚨 PLANTÃO: ${det.nome.toUpperCase()}</strong><br><small>📍 ${det.local}</small></div>
                     <a href="https://wa.me/55${det.zap}" target="_blank" class="btn-action btn-whatsapp" style="flex:none; padding:8px 15px; width:auto;">WHATSAPP</a>
-                </div>`;
-            } else {
-                banner.innerHTML = `<strong>🚨 PLANTÃO HOJE:</strong> ${plantaoNomeDoDia} (Endereço não cadastrado)`;
-            }
+                </div>` : `<strong>🚨 PLANTÃO HOJE:</strong> ${plantaoNomeDoDia}`;
         }
         render(dadosOriginais.filter(d => normalizar(d.cat).includes('saude')));
-        smoothScroll();
+        scrollToResults();
     }
 
     function render(lista) {
@@ -362,15 +358,18 @@
         document.getElementById('plantaoSection').style.display = 'none';
         if(c === 'todos') render(dadosOriginais);
         else render(dadosOriginais.filter(d => normalizar(d.cat).includes(normalizar(c))));
-        smoothScroll();
+        scrollToResults();
     }
 
     document.getElementById('vagasBtn').onclick = (e) => { e.preventDefault(); renderVagas(); };
     document.getElementById('plantaoBtn').onclick = (e) => { e.preventDefault(); mostrarPlantao(); };
-    document.getElementById('searchInput').oninput = (e) => render(dadosOriginais.filter(d => d.tags.includes(normalizar(e.target.value))));
+    document.getElementById('searchInput').oninput = (e) => {
+        const t = normalizar(e.target.value);
+        if(t === "") { render(dadosOriginais); }
+        else { render(dadosOriginais.filter(d => d.tags.includes(t))); }
+    };
 
     carregarDados();
 </script>
-    
 </body>
 </html>
