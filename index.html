@@ -261,10 +261,15 @@
         dadosOriginais = linhas.slice(1).map(linha => {
             const getVal = (n) => linha[cabecalho.indexOf(n.toLowerCase())] || "";
             return {
-                nome: getVal("Nome"), cat: getVal("Categoria"), sub: getVal("Subcategoria"),
+                nome: getVal("Nome"), 
+                cat: getVal("Categoria"), 
+                sub: getVal("Subcategoria"),
                 local: `${getVal("Logradouro")}, ${getVal("Número")} - ${getVal("Bairro")}`,
-                zap: getVal("Telefone").replace(/\D/g, ''), telFormatado: getVal("Telefone"),
-                site: getVal("Site"), tags: normalizar(`${getVal("Nome")} ${getVal("Categoria")} ${getVal("Subcategoria")} ${getVal("Tag")}`)
+                zap: getVal("Telefone").replace(/\D/g, ''), 
+                telFormatado: getVal("Telefone"),
+                site: getVal("Site"),
+                redeSocial: getVal("Rede Social"), // Nova coluna identificada
+                tags: normalizar(`${getVal("Nome")} ${getVal("Categoria")} ${getVal("Subcategoria")} ${getVal("Tag")}`)
             };
         }).filter(item => item.nome);
         render(dadosOriginais);
@@ -341,7 +346,6 @@
         document.getElementById('vagasSection').style.display = 'none';
         document.getElementById('mainGrid').style.display = 'none';
         document.getElementById('btnVoltar').style.display = 'block';
-        
         if (plantaoNomeDoDia) {
             const det = dadosOriginais.find(f => normalizar(f.nome) === normalizar(plantaoNomeDoDia));
             banner.innerHTML = det ? `
@@ -355,19 +359,27 @@
 
     function render(lista) {
         const grid = document.getElementById('mainGrid');
-        grid.innerHTML = lista.map(item => `
+        grid.innerHTML = lista.map(item => {
+            // Regra para ícone de rede social (detecta se é instagram)
+            const iconRede = item.redeSocial.toLowerCase().includes('instagram') ? 'fab fa-instagram' : 'fas fa-share-alt';
+            
+            return `
             <div class="card">
                 <div class="subcat-label">${item.sub || item.cat}</div>
                 <h3>${item.nome}</h3>
                 <span class="badge">${item.cat}</span>
                 <p style="font-size:0.8rem; color:#666; margin:0">📍 ${item.local}</p>
                 ${item.telFormatado ? `<p style="font-size:0.8rem; color:#666; margin:4px 0">📞 ${item.telFormatado}</p>` : ''}
+                
                 <div class="btn-container">
-                    ${item.zap ? `<a href="https://wa.me/55${item.zap}" target="_blank" class="btn-action btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : ''}
-                    ${item.site ? `<a href="${item.site}" target="_blank" class="btn-action btn-site"><i class="fas fa-globe"></i> Site</a>` : ''}
+                    ${item.zap ? `<a href="https://wa.me/55${item.zap}" target="_blank" class="btn-action btn-whatsapp" title="Chamar no WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : ''}
+                    
+                    ${item.redeSocial ? `<a href="${item.redeSocial}" target="_blank" class="btn-action btn-site" style="background:#E1306C; color:white;" title="Ver Redes Sociais"><i class="${iconRede}"></i> Social</a>` : ''}
+                    
+                    ${item.site ? `<a href="${item.site}" target="_blank" class="btn-action btn-site" title="Visitar Site Oficial"><i class="fas fa-globe"></i> Site</a>` : ''}
                 </div>
             </div>
-        `).join('');
+        `}).join('');
     }
 
     function filter(c) {
